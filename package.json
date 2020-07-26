@@ -1,0 +1,27 @@
+{
+  "name": "ugamers-api",
+  "version": "1.0.0",
+  "description": "A social network for gamers",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/valdineifer/ugamers-api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/valdineifer/ugamers-api/issues"
+  },
+  "homepage": "https://github.com/valdineifer/ugamers-api#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-graphql": "^0.11.0",
+    "graphql": "^15.3.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.5.0"
+  }
+}
