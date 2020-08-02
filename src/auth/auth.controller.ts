@@ -10,10 +10,10 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateUserDto } from '../users/dto/create-user.dto';
+import { CreateUserDto } from '../dtos/users/create-user.dto';
 import { CredentialsDto } from './dto/credentials.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { User } from '../users/user.entity';
+import { User } from '../entities/user.entity';
 import { GetUser } from './get-user.decorator';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { UserRole } from '../users/user-roles.enum';

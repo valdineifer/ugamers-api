@@ -4,10 +4,10 @@ import {
   UnauthorizedException,
   NotFoundException,
 } from '@nestjs/common';
-import { UserRepository } from '../users/users.repository';
+import { UserRepository } from '../repositories/users.repository';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateUserDto } from '../users/dto/create-user.dto';
-import { User } from '../users/user.entity';
+import { CreateUserDto } from '../dtos/users/create-user.dto';
+import { User } from '../entities/user.entity';
 import { UserRole } from '../users/user-roles.enum';
 import { CredentialsDto } from './dto/credentials.dto';
 import { JwtService } from '@nestjs/jwt';

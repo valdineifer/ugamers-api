@@ -1,13 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserRepository } from './../users/users.repository';
-import { UsersService } from './users.service';
-import { UserRole } from './user-roles.enum';
-import { CreateUserDto } from './dto/create-user.dto';
+import { UserRepository } from '../src/repositories/users.repository';
+import { UsersService } from '../src/services/users.service';
+import { UserRole } from '../src/users/user-roles.enum';
+import { CreateUserDto } from '../src/dtos/users/create-user.dto';
 import {
   UnprocessableEntityException,
   NotFoundException,
 } from '@nestjs/common';
-import { FindUsersQueryDto } from './dto/find-users-query-dto';
+import { FindUsersQueryDto } from '../src/dtos/users/find-users-query-dto';
 
 const mockUserRepository = () => ({
   createUser: jest.fn(),

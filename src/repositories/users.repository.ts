@@ -1,7 +1,7 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { User } from './user.entity';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UserRole } from './user-roles.enum';
+import { User } from '../entities/user.entity';
+import { CreateUserDto } from '../dtos/users/create-user.dto';
+import { UserRole } from '../users/user-roles.enum';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
 import {
@@ -9,7 +9,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { CredentialsDto } from '../auth/dto/credentials.dto';
-import { FindUsersQueryDto } from './dto/find-users-query-dto';
+import { FindUsersQueryDto } from '../dtos/users/find-users-query-dto';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
