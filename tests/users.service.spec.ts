@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserRepository } from '../src/repositories/users.repository';
 import { UsersService } from '../src/services/users.service';
-import { UserRole } from '../src/users/user-roles.enum';
+import { UserRole } from '../src/helpers/enum/user-roles.enum';
 import { CreateUserDto } from '../src/dtos/users/create-user.dto';
 import {
   UnprocessableEntityException,

@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from '../repositories/users.repository';
 import { CreateUserDto } from '../dtos/users/create-user.dto';
 import { User } from '../entities/user.entity';
-import { UserRole } from '../users/user-roles.enum';
+import { UserRole } from '../helpers/enum/user-roles.enum';
 import { UpdateUserDto } from '../dtos/users/update-user.dto';
 import { FindUsersQueryDto } from '../dtos/users/find-users-query-dto';
 
