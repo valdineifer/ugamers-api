@@ -15,12 +15,12 @@ import { CreateUserDto } from '../dtos/users/create-user.dto';
 import { UsersService } from '../services/users.service';
 import { ReturnUserDto } from '../dtos/users/return-user.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { RolesGuard } from '../auth/roles.guard';
-import { Role } from '../auth/role.decorator';
+import { RolesGuard } from '../guards/roles.guard';
+import { Role } from '../decorators/role.decorator';
 import { UserRole } from '../helpers/enum/user-roles.enum';
 import { UpdateUserDto } from '../dtos/users/update-user.dto';
 import { User } from '../entities/user.entity';
-import { GetUser } from '../auth/get-user.decorator';
+import { GetUser } from '../decorators/get-user.decorator';
 import { FindUsersQueryDto } from '../dtos/users/find-users-query-dto';
 
 @Controller('users')

@@ -9,11 +9,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from '../dtos/users/create-user.dto';
 import { User } from '../entities/user.entity';
 import { UserRole } from '../helpers/enum/user-roles.enum';
-import { CredentialsDto } from './dto/credentials.dto';
+import { CredentialsDto } from '../dtos/auth/credentials.dto';
 import { JwtService } from '@nestjs/jwt';
 import { MailerService } from '@nestjs-modules/mailer';
 import { randomBytes } from 'crypto';
-import { ChangePasswordDto } from './dto/change-password.dto';
+import { ChangePasswordDto } from '../dtos/auth/change-password.dto';
 
 @Injectable()
 export class AuthService {

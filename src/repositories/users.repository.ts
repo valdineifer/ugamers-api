@@ -8,7 +8,7 @@ import {
   ConflictException,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { CredentialsDto } from '../auth/dto/credentials.dto';
+import { CredentialsDto } from '../dtos/auth/credentials.dto';
 import { FindUsersQueryDto } from '../dtos/users/find-users-query-dto';
 
 @EntityRepository(User)
