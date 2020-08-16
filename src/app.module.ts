@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { GraphQLModule } from '@nestjs/graphql';
 import { typeOrmConfig } from './configs/typeorm.config';
 import { UsersModule } from './modules/users.module';
 import { AuthModule } from './modules/auth.module';
@@ -15,6 +16,10 @@ import { mailerConfig } from './configs/mailer.config';
     TypeOrmModule.forRoot(typeOrmConfig),
     WinstonModule.forRoot(winstonConfig),
     MailerModule.forRoot(mailerConfig),
+    GraphQLModule.forRoot({
+      autoSchemaFile: 'schema.gql',
+      playground: true,
+    }),
     UsersModule,
     AuthModule,
   ],
