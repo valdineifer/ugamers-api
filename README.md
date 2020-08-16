@@ -3,6 +3,7 @@
 ## Installation
 
 ```bash
+# do not run with yarn
 $ npm install
 ```
 
@@ -14,6 +15,8 @@ $ npm run start
 
 # watch mode
 $ npm run start:dev
+# or
+$ yarn start:dev
 
 # production mode
 $ npm run start:prod
