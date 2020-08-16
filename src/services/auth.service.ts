@@ -7,7 +7,7 @@ import {
 import { UserRepository } from '../repositories/users.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from '../dtos/users/create-user.dto';
-import { User } from '../entities/user.entity';
+import User from '../entities/user.entity';
 import { UserRole } from '../helpers/enum/user-roles.enum';
 import { CredentialsDto } from '../dtos/auth/credentials.dto';
 import { JwtService } from '@nestjs/jwt';

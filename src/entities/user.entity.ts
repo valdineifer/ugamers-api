@@ -8,25 +8,37 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { ObjectType, Field } from '@nestjs/graphql';
 
-@Entity()
+@ObjectType()
+@Entity({ name: 'user' })
 @Unique(['email'])
-export class User extends BaseEntity {
+export default class User extends BaseEntity {
+  @Field()
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Field()
   @Column({ nullable: false, type: 'varchar', length: 200 })
   email: string;
 
+  @Field()
   @Column({ nullable: false, type: 'varchar', length: 200 })
   name: string;
 
+  @Field()
+  @Column({ nullable: false, type: 'varchar', length: 100 })
+  username: string;
+
+  @Field()
   @Column({ nullable: false, type: 'varchar', length: 20 })
   role: string;
 
+  @Field()
   @Column({ nullable: false, default: true })
   status: boolean;
 
+  @Field()
   @Column({ nullable: false })
   password: string;
 
