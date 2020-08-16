@@ -9,31 +9,29 @@ import {
   Patch,
   ForbiddenException,
   Delete,
-  Query,
 } from '@nestjs/common';
 import { CreateUserDto } from '../dtos/users/create-user.dto';
-import { UsersService } from '../services/users.service';
+import { UserService } from '../services/users.service';
 import { ReturnUserDto } from '../dtos/users/return-user.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from '../guards/roles.guard';
 import { Role } from '../decorators/role.decorator';
 import { UserRole } from '../helpers/enum/user-roles.enum';
 import { UpdateUserDto } from '../dtos/users/update-user.dto';
-import { User } from '../entities/user.entity';
+import User from '../entities/user.entity';
 import { GetUser } from '../decorators/get-user.decorator';
-import { FindUsersQueryDto } from '../dtos/users/find-users-query-dto';
 
 @Controller('users')
 @UseGuards(AuthGuard(), RolesGuard)
 export class UsersController {
-  constructor(private usersService: UsersService) {}
+  constructor(private userService: UserService) {}
 
   @Post()
   @Role(UserRole.ADMIN)
   async createAdminUser(
     @Body(ValidationPipe) createUserDto: CreateUserDto,
   ): Promise<ReturnUserDto> {
-    const user = await this.usersService.createAdminUser(createUserDto);
+    const user = await this.userService.createAdminUser(createUserDto);
     return {
       user,
       message: 'Administrador cadastrado com sucesso',
@@ -42,8 +40,8 @@ export class UsersController {
 
   @Get(':id')
   @Role(UserRole.ADMIN)
-  async findUserById(@Param('id') id): Promise<ReturnUserDto> {
-    const user = await this.usersService.findUserById(id);
+  async findUserById(@Param('id') id: string): Promise<ReturnUserDto> {
+    const user = await this.userService.findUserById(id);
     return {
       user,
       message: 'Usuário encontrado',
@@ -61,26 +59,16 @@ export class UsersController {
         'Você não tem autorização para acessar esse recurso',
       );
     } else {
-      return this.usersService.updateUser(updateUserDto, id);
+      return this.userService.updateUser(updateUserDto, id);
     }
   }
 
   @Delete(':id')
   @Role(UserRole.ADMIN)
   async deleteUser(@Param('id') id: string) {
-    await this.usersService.deleteUser(id);
+    await this.userService.deleteUser(id);
     return {
       message: 'Usuário removido com sucesso',
-    };
-  }
-
-  @Get()
-  @Role(UserRole.ADMIN)
-  async findUsers(@Query() query: FindUsersQueryDto) {
-    const found = await this.usersService.findUsers(query);
-    return {
-      found,
-      message: 'Usuários encontrados',
     };
   }
 }
