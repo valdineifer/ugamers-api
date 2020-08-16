@@ -5,7 +5,9 @@ import {
   MinLength,
   Matches,
 } from 'class-validator';
+import { ArgsType } from '@nestjs/graphql';
 
+@ArgsType()
 export class CreateUserDto {
   @IsNotEmpty({
     message: 'Informe um endereço de email',
@@ -22,12 +24,23 @@ export class CreateUserDto {
   email: string;
 
   @IsNotEmpty({
-    message: 'Informe o nome do usuário',
+    message: 'Informe o seu nome',
   })
   @MaxLength(200, {
     message: 'O nome deve ter menos de 200 caracteres',
   })
   name: string;
+
+  @IsNotEmpty({
+    message: 'Informe o seu nome de usuário',
+  })
+  @MinLength(3, {
+    message: 'O seu nome de usuário deve ter pelo menos 3 caracteres',
+  })
+  @MaxLength(100, {
+    message: 'O nome deve ter menos de 100 caracteres',
+  })
+  username: string;
 
   @IsNotEmpty({
     message: 'Informe uma senha',

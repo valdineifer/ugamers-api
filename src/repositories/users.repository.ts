@@ -1,5 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { User } from '../entities/user.entity';
+import User from '../entities/user.entity';
 import { CreateUserDto } from '../dtos/users/create-user.dto';
 import { UserRole } from '../helpers/enum/user-roles.enum';
 import * as bcrypt from 'bcrypt';
@@ -49,11 +49,12 @@ export class UserRepository extends Repository<User> {
     createUserDto: CreateUserDto,
     role: UserRole,
   ): Promise<User> {
-    const { email, name, password } = createUserDto;
+    const { email, name, username, password } = createUserDto;
 
     const user = this.create();
     user.email = email;
     user.name = name;
+    user.username = username;
     user.role = role;
     user.status = true;
     user.confirmationToken = crypto.randomBytes(32).toString('hex');

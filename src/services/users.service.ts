@@ -6,23 +6,30 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from '../repositories/users.repository';
 import { CreateUserDto } from '../dtos/users/create-user.dto';
-import { User } from '../entities/user.entity';
+import User from '../entities/user.entity';
 import { UserRole } from '../helpers/enum/user-roles.enum';
 import { UpdateUserDto } from '../dtos/users/update-user.dto';
-import { FindUsersQueryDto } from '../dtos/users/find-users-query-dto';
 
 @Injectable()
-export class UsersService {
+export class UserService {
   constructor(
     @InjectRepository(UserRepository)
     private userRepository: UserRepository,
   ) {}
 
   async createAdminUser(createUserDto: CreateUserDto): Promise<User> {
-    if (createUserDto.password != createUserDto.passwordConfirmation) {
+    if (createUserDto.password !== createUserDto.passwordConfirmation) {
       throw new UnprocessableEntityException('As senhas não conferem');
     } else {
       return this.userRepository.createUser(createUserDto, UserRole.ADMIN);
+    }
+  }
+
+  async createUser(createUserDto: CreateUserDto): Promise<User> {
+    if (createUserDto.password !== createUserDto.passwordConfirmation) {
+      throw new UnprocessableEntityException('As senhas não conferem');
+    } else {
+      return this.userRepository.createUser(createUserDto, UserRole.USER);
     }
   }
 
@@ -49,16 +56,11 @@ export class UsersService {
   async deleteUser(userId: string) {
     const result = await this.userRepository.delete({ id: userId });
     if (result.affected === 0) {
-      throw new NotFoundException(
-        'Não foi encontrado um usuário com o ID informado',
-      );
+      throw new NotFoundException('Não foi encontrado um usuário com o ID informado');
     }
   }
 
-  async findUsers(
-    queryDto: FindUsersQueryDto,
-  ): Promise<{ users: User[]; total: number }> {
-    const users = await this.userRepository.findUsers(queryDto);
-    return users;
+  async findUsers(): Promise<User[]> {
+    return this.userRepository.find();
   }
 }
