@@ -16,7 +16,7 @@ import { ObjectType, Field } from '@nestjs/graphql';
 export default class User extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id: number;
 
   @Field()
   @Column({ nullable: false, type: 'varchar', length: 200 })
