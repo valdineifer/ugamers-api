@@ -13,7 +13,7 @@ import { AuthService } from '../services/auth.service';
 import { CreateUserDto } from '../dtos/users/create-user.dto';
 import { CredentialsDto } from '../dtos/auth/credentials.dto';
 import { AuthGuard } from '@nestjs/passport';
-import User from '../entities/user.entity';
+import User from '../entities/User';
 import { GetUser } from '../decorators/get-user.decorator';
 import { ChangePasswordDto } from '../dtos/auth/change-password.dto';
 import { UserRole } from '../helpers/enum/user-roles.enum';
@@ -76,7 +76,7 @@ export class AuthController {
     @Body(ValidationPipe) changePasswordDto: ChangePasswordDto,
     @GetUser() user: User,
   ) {
-    if (user.role !== UserRole.ADMIN && user.id.toString() !== id)
+    if (user.role.id !== UserRole.ADMIN && user.id.toString() !== id)
       throw new UnauthorizedException(
         'Você não tem permissão para realizar esta operação',
       );

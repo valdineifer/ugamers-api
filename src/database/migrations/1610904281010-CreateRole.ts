@@ -15,7 +15,7 @@ export class CreateRole1610904281010 implements MigrationInterface {
                 isNullable: false,
             },
             {
-                name: 'descricao',
+                name: 'description',
                 type: 'varchar',
                 isNullable: false,
             },

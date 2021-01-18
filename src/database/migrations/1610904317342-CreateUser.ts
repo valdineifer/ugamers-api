@@ -50,6 +50,7 @@ export class CreateUser1610904317342 implements MigrationInterface {
             {
                 name: 'roleId',
                 type: 'int',
+                default: 1, // Default role: User
                 isNullable: false,
             },
             {

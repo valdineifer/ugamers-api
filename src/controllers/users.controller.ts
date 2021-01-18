@@ -18,7 +18,7 @@ import { RolesGuard } from '../guards/roles.guard';
 import { Role } from '../decorators/role.decorator';
 import { UserRole } from '../helpers/enum/user-roles.enum';
 import { UpdateUserDto } from '../dtos/users/update-user.dto';
-import User from '../entities/user.entity';
+import User from '../entities/User';
 import { GetUser } from '../decorators/get-user.decorator';
 
 @Controller('users')
@@ -40,7 +40,7 @@ export class UsersController {
 
   @Get(':id')
   @Role(UserRole.ADMIN)
-  async findUserById(@Param('id') id: string): Promise<ReturnUserDto> {
+  async findUserById(@Param('id') id: number): Promise<ReturnUserDto> {
     const user = await this.userService.findUserById(id);
     return {
       user,
@@ -52,9 +52,9 @@ export class UsersController {
   async updateUser(
     @Body(ValidationPipe) updateUserDto: UpdateUserDto,
     @GetUser() user: User,
-    @Param('id') id: string,
+    @Param('id') id: number,
   ) {
-    if (user.role != UserRole.ADMIN && user.id.toString() != id) {
+    if (user.role.id !== UserRole.ADMIN && user.id !== id) {
       throw new ForbiddenException(
         'Você não tem autorização para acessar esse recurso',
       );
@@ -65,7 +65,7 @@ export class UsersController {
 
   @Delete(':id')
   @Role(UserRole.ADMIN)
-  async deleteUser(@Param('id') id: string) {
+  async deleteUser(@Param('id') id: number) {
     await this.userService.deleteUser(id);
     return {
       message: 'Usuário removido com sucesso',

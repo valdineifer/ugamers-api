@@ -6,7 +6,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from '../repositories/users.repository';
 import { CreateUserDto } from '../dtos/users/create-user.dto';
-import User from '../entities/user.entity';
+import User from '../entities/User';
 import { UserRole } from '../helpers/enum/user-roles.enum';
 import { UpdateUserDto } from '../dtos/users/update-user.dto';
 
@@ -29,11 +29,11 @@ export class UserService {
     if (createUserDto.password !== createUserDto.passwordConfirmation) {
       throw new UnprocessableEntityException('As senhas não conferem');
     } else {
-      return this.userRepository.createUser(createUserDto, UserRole.USER);
+      return this.userRepository.createUser(createUserDto);
     }
   }
 
-  async findUserById(userId: string): Promise<User> {
+  async findUserById(userId: number): Promise<User> {
     const user = await this.userRepository.findOne(userId, {
       select: ['email', 'name', 'role', 'id'],
     });
@@ -43,7 +43,7 @@ export class UserService {
     return user;
   }
 
-  async updateUser(updateUserDto: UpdateUserDto, id: string) {
+  async updateUser(updateUserDto: UpdateUserDto, id: number) {
     const result = await this.userRepository.update({ id }, updateUserDto);
     if (result.affected > 0) {
       const user = await this.findUserById(id);
@@ -53,7 +53,7 @@ export class UserService {
     }
   }
 
-  async deleteUser(userId: string) {
+  async deleteUser(userId: number) {
     const result = await this.userRepository.delete({ id: userId });
     if (result.affected === 0) {
       throw new NotFoundException('Não foi encontrado um usuário com o ID informado');

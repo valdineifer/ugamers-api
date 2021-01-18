@@ -1,4 +1,3 @@
-import { UserRole } from '../../helpers/enum/user-roles.enum';
 import { IsString, IsEmail, IsOptional } from 'class-validator';
 export class UpdateUserDto {
   @IsOptional()
@@ -15,9 +14,6 @@ export class UpdateUserDto {
     },
   )
   email: string;
-
-  @IsOptional()
-  role: UserRole;
 
   @IsOptional()
   status: boolean;

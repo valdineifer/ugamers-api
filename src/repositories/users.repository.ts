@@ -1,7 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
-import User from '../entities/user.entity';
+import User from '../entities/User';
 import { CreateUserDto } from '../dtos/users/create-user.dto';
-import { UserRole } from '../helpers/enum/user-roles.enum';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
 import {
@@ -45,9 +44,10 @@ export class UserRepository extends Repository<User> {
     return { users, total };
   }
 
+  // TODO: reajustar attach de Role em User
   async createUser(
     createUserDto: CreateUserDto,
-    role: UserRole,
+    role?: number,
   ): Promise<User> {
     const { email, name, username, password } = createUserDto;
 
@@ -55,15 +55,14 @@ export class UserRepository extends Repository<User> {
     user.email = email;
     user.name = name;
     user.username = username;
-    user.role = role;
     user.status = true;
     user.confirmationToken = crypto.randomBytes(32).toString('hex');
-    user.salt = await bcrypt.genSalt();
-    user.password = await this.hashPassword(password, user.salt);
+    user.password = await this.hashPassword(password);
+    user.roleId = role;
+
     try {
       await user.save();
       delete user.password;
-      delete user.salt;
       return user;
     } catch (error) {
       if (error.code.toString() === '23505') {
@@ -78,8 +77,7 @@ export class UserRepository extends Repository<User> {
 
   async changePassword(id: string, password: string) {
     const user = await this.findOne(id);
-    user.salt = await bcrypt.genSalt();
-    user.password = await this.hashPassword(password, user.salt);
+    user.password = await this.hashPassword(password);
     user.recoverToken = null;
     await user.save();
   }
@@ -95,7 +93,8 @@ export class UserRepository extends Repository<User> {
     }
   }
 
-  private async hashPassword(password: string, salt: string): Promise<string> {
+  private async hashPassword(password: string): Promise<string> {
+    const salt = await bcrypt.genSaltSync(process.env.SALT)
     return bcrypt.hash(password, salt);
   }
 }

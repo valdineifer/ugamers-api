@@ -1,5 +1,5 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import User from 'src/entities/user.entity';
+import User from 'src/entities/User';
 import UserInput from './input/user.input'
 import { UserService } from 'src/services/users.service';
 
@@ -15,7 +15,7 @@ class UserResolver {
   }
 
   @Query(() => User, { nullable: true })
-  public async user(@Args('id', { type: () => String }) id: string): Promise<User> {
+  public async user(@Args('id', { type: () => Number }) id: number): Promise<User> {
     return this.userService.findUserById(id);
   }
 
