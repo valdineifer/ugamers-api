@@ -15,19 +15,19 @@ import { UserService } from '../services/users.service';
 import { ReturnUserDto } from '../dtos/users/return-user.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from '../guards/roles.guard';
-import { Role } from '../decorators/role.decorator';
+import { Roles } from '../decorators/roles.decorator';
 import { UserRole } from '../helpers/enum/user-roles.enum';
 import { UpdateUserDto } from '../dtos/users/update-user.dto';
 import User from '../entities/User';
 import { GetUser } from '../decorators/get-user.decorator';
 
 @Controller('users')
-@UseGuards(AuthGuard(), RolesGuard)
+@UseGuards(RolesGuard)
 export class UsersController {
   constructor(private userService: UserService) {}
 
   @Post()
-  @Role(UserRole.ADMIN)
+  @Roles(UserRole.ADMIN)
   async createAdminUser(
     @Body(ValidationPipe) createUserDto: CreateUserDto,
   ): Promise<ReturnUserDto> {
@@ -39,7 +39,7 @@ export class UsersController {
   }
 
   @Get(':id')
-  @Role(UserRole.ADMIN)
+  @Roles(UserRole.ADMIN)
   async findUserById(@Param('id') id: number): Promise<ReturnUserDto> {
     const user = await this.userService.findUserById(id);
     return {
@@ -64,7 +64,7 @@ export class UsersController {
   }
 
   @Delete(':id')
-  @Role(UserRole.ADMIN)
+  @Roles(UserRole.ADMIN)
   async deleteUser(@Param('id') id: number) {
     await this.userService.deleteUser(id);
     return {
