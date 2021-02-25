@@ -13,6 +13,7 @@ import {
 import * as bcrypt from 'bcrypt';
 import { ObjectType, Field } from '@nestjs/graphql';
 import Role from './Role';
+import Country from './Country';
 
 @ObjectType()
 @Entity({ name: 'user' })
@@ -23,35 +24,40 @@ export default class User extends BaseEntity {
   id: number;
 
   @Field()
-  @Column({ nullable: false, type: 'varchar', length: 200 })
+  @Column()
   email: string;
 
   @Field()
-  @Column({ nullable: false, type: 'varchar', length: 200 })
+  @Column()
   name: string;
 
   @Field()
-  @Column({ nullable: false, type: 'varchar', length: 100 })
+  @Column()
   username: string;
 
   @Field()
-  @Column({ nullable: false, default: true })
+  @Column()
   status: boolean;
 
   @Field()
-  @Column({ nullable: false })
+  @Column()
   password: string;
 
   @Field()
-  @Column({ nullable: true, type: 'varchar', length: 64 })
+  @Column()
   confirmationToken: string;
 
   @Field()
-  @Column({ nullable: true, type: 'varchar', length: 64 })
+  @Column()
   recoverToken: string;
 
-  @Field({defaultValue: 1, nullable: false})
+  @Field()
+  @Column()
   roleId: number;
+
+  @Field()
+  @Column()
+  countryId: number;
 
   @Field()
   @CreateDateColumn()
@@ -67,13 +73,26 @@ export default class User extends BaseEntity {
   
   @Field(() => Role)
   role: Role;
+  
+  @Field(() => Country)
+  country: Country;
 
 
   // Associations
 
-  @ManyToOne(() => Role, role => role.userConnection)
-  @JoinColumn({name: 'role_id'})
+  @ManyToOne(
+    () => Role,
+    role => role.userConnection
+  )
+  @JoinColumn({ name: 'roleId' })
   roleConnection: Promise<Role>;
+
+  @ManyToOne(
+    () => Country,
+    country => country.userConnection
+  )
+  @JoinColumn({ name: 'countryId' })
+  countryConnection: Promise<Country>;
 
   async checkPassword(password: string): Promise<boolean> {
     const hash = await bcrypt.hash(password, 10);

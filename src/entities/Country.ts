@@ -3,22 +3,26 @@ import {BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typ
 import User from "./User";
 
 @ObjectType()
-@Entity({name: 'role'})
-export default class Role extends BaseEntity {
+@Entity({name: 'country'})
+export default class Country extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
   id: number;
 
   @Field()
   @Column()
-  description: string;
+  isoCode: string;
+
+  @Field()
+  @Column()
+  name: string;
 
 
   // Associations
 
   @OneToMany(
     () => User,
-    user => user.roleConnection
+    user => user.countryConnection
   )
   userConnection: Promise<User[]>;
 }
