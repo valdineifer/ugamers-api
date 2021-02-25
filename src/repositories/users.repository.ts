@@ -44,12 +44,8 @@ export class UserRepository extends Repository<User> {
     return { users, total };
   }
 
-  // TODO: reajustar attach de Role em User
-  async createUser(
-    createUserDto: CreateUserDto,
-    role?: number,
-  ): Promise<User> {
-    const { email, name, username, password } = createUserDto;
+  async createUser(createUserDto: CreateUserDto): Promise<User> {
+    const { email, name, username, password, roleId } = createUserDto;
 
     const user = this.create();
     user.email = email;
@@ -58,7 +54,7 @@ export class UserRepository extends Repository<User> {
     user.status = true;
     user.confirmationToken = crypto.randomBytes(32).toString('hex');
     user.password = await this.hashPassword(password);
-    user.roleId = role;
+    user.roleId = roleId;
 
     try {
       await user.save();
@@ -69,7 +65,7 @@ export class UserRepository extends Repository<User> {
         throw new ConflictException('Endereço de email já está em uso');
       } else {
         throw new InternalServerErrorException(
-          'Erro ao salvar o usuário no banco de dados',
+          error, 'Erro ao salvar o usuário no banco de dados',
         );
       }
     }
@@ -94,7 +90,7 @@ export class UserRepository extends Repository<User> {
   }
 
   private async hashPassword(password: string): Promise<string> {
-    const salt = await bcrypt.genSaltSync(process.env.SALT)
+    const salt = await bcrypt.genSaltSync(parseInt(process.env.SALT, 10))
     return bcrypt.hash(password, salt);
   }
 }

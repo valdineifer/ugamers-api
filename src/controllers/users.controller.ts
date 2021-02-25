@@ -26,18 +26,6 @@ import { GetUser } from '../decorators/get-user.decorator';
 export class UsersController {
   constructor(private userService: UserService) {}
 
-  @Post()
-  @Roles(UserRole.ADMIN)
-  async createAdminUser(
-    @Body(ValidationPipe) createUserDto: CreateUserDto,
-  ): Promise<ReturnUserDto> {
-    const user = await this.userService.createAdminUser(createUserDto);
-    return {
-      user,
-      message: 'Administrador cadastrado com sucesso',
-    };
-  }
-
   @Get(':id')
   @Roles(UserRole.ADMIN)
   async findUserById(@Param('id') id: number): Promise<ReturnUserDto> {

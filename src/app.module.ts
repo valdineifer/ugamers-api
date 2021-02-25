@@ -21,7 +21,7 @@ import { mailerConfig } from './configs/mailer.config';
       playground: true,
     }),
     UsersModule,
-    AuthModule,
+    // AuthModule,
   ],
   controllers: [],
   providers: [

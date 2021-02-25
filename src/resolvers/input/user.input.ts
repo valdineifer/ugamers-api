@@ -1,6 +1,18 @@
-import { ArgsType, Field } from '@nestjs/graphql';
+import { InputType, Field } from '@nestjs/graphql';
 
-@ArgsType()
+@InputType()
+class UserRoleConnectInput {
+  @Field()
+  readonly id: number;
+}
+
+@InputType()
+class UserRoleInput {
+  @Field()
+  readonly connect: UserRoleConnectInput;
+}
+
+@InputType()
 class UserInput {
   @Field()
   readonly email: string;
@@ -9,9 +21,7 @@ class UserInput {
   @Field()
   readonly username: string;
   @Field()
-  readonly role: string;
-  @Field()
-  readonly status: boolean;
+  readonly role: UserRoleInput;
   @Field()
   readonly password: string;
   @Field()

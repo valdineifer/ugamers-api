@@ -12,6 +12,6 @@ import UserResolver from 'src/resolvers/user.resolver';
     PassportModule.register({ defaultStrategy: 'jwt' }),
   ],
   providers: [UserService, UserResolver],
-  controllers: [UsersController],
+  // controllers: [UsersController],
 })
 export class UsersModule {}

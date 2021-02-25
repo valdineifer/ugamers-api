@@ -30,7 +30,6 @@ export class AuthService {
     } else {
       const user = await this.userRepository.createUser(
         createUserDto,
-        UserRole.USER,
       );
       const mail = {
         to: user.email,

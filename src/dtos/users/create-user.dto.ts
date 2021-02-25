@@ -4,8 +4,10 @@ import {
   MaxLength,
   MinLength,
   Matches,
+  IsEnum,
 } from 'class-validator';
 import { ArgsType } from '@nestjs/graphql';
+import { UserRole } from 'src/helpers/enum/user-roles.enum';
 
 @ArgsType()
 export class CreateUserDto {
@@ -65,4 +67,8 @@ export class CreateUserDto {
       'A senha deve conter pelo menos uma letra maiúscula, uma letra minúscula, um número ou um símbulo',
   })
   passwordConfirmation: string;
+
+  @IsNotEmpty({ message: 'Informe o tipo do usuário' })
+  @IsEnum(UserRole, { message: 'O escopo (role) informado não é válido' })
+  roleId: number;
 }

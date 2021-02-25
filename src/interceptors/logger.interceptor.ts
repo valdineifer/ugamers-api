@@ -17,22 +17,28 @@ export class LoggerInterceptor implements NestInterceptor {
   }
 
   private log(req) {
-    const body = { ...req.body };
-    delete body.password;
-    delete body.passwordConfirmation;
-    const user = (req as any).user;
-    const userEmail = user ? user.email : null;
-    this.logger.info({
-      timestamp: new Date().toISOString(),
-      method: req.method,
-      route: req.route.path,
-      data: {
-        body: body,
-        query: req.query,
-        params: req.params,
-      },
-      from: req.ip,
-      madeBy: userEmail,
-    });
+    if (req) {
+      const body = { ...req.body };
+      delete body.password;
+      delete body.passwordConfirmation;
+      const user = (req as any).user;
+      const userEmail = user ? user.email : null;
+      this.logger.info({
+        timestamp: new Date().toISOString(),
+        method: req.method,
+        route: req.route.path,
+        data: {
+          body: body,
+          query: req.query,
+          params: req.params,
+        },
+        from: req.ip,
+        madeBy: userEmail,
+      });
+    } else {
+      this.logger.info({
+        message: 'Request object not found'
+      });
+    }
   }
 }
