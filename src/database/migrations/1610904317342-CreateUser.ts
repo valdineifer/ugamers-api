@@ -15,6 +15,11 @@ export class CreateUser1610904317342 implements MigrationInterface {
                 isNullable: false,
             },
             {
+                name: 'name',
+                type: 'varchar',
+                isNullable: false,
+            },
+            {
                 name: 'email',
                 type: 'varchar',
                 isNullable: false,
@@ -54,6 +59,11 @@ export class CreateUser1610904317342 implements MigrationInterface {
                 isNullable: false,
             },
             {
+                name: 'countryId',
+                type: 'int',
+                isNullable: true,
+            },
+            {
                 name: 'createdAt',
                 type: 'timestamptz',
                 isNullable: false,
@@ -77,12 +87,19 @@ export class CreateUser1610904317342 implements MigrationInterface {
         columnNames: ['roleId'],
         referencedColumnNames: ['id'],
         referencedTableName: 'role',
+        onDelete: 'SET DEFAULT'
+    });
+    private countryFk = new TableForeignKey({
+        columnNames: ['countryId'],
+        referencedColumnNames: ['id'],
+        referencedTableName: 'country',
         onDelete: 'SET NULL'
     });
 
     public async up(queryRunner: QueryRunner): Promise<any> {
         await queryRunner.createTable(this.table);
         await queryRunner.createForeignKey('user', this.roleFk);
+        await queryRunner.createForeignKey('user', this.countryFk);
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
