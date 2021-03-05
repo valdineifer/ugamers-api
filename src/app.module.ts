@@ -3,7 +3,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { GraphQLModule } from '@nestjs/graphql';
 import { typeOrmConfig } from './configs/typeorm.config';
 import { UsersModule } from './modules/users.module';
-import { AuthModule } from './modules/auth.module';
 import { LoggerInterceptor } from './interceptors/logger.interceptor';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { WinstonModule } from 'nest-winston';

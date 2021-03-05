@@ -1,14 +1,16 @@
-import { Args, Mutation, Parent, Query, ResolveProperty, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import User from 'src/entities/User';
 import UserInput from './input/user.input'
 import { UserService } from 'src/services/users.service';
-import { UserRole } from 'src/helpers/enum/user-roles.enum';
 import Role from 'src/entities/Role';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
-@Resolver()
+@Resolver(() => User)
 class UserResolver {
   constructor(
     private readonly userService: UserService,
+    @InjectRepository(Role) private readonly roleRepository: Repository<Role>,
   ) {}
 
   @Query(() => [User])
@@ -25,7 +27,7 @@ class UserResolver {
   public async createUser(@Args('data') data: UserInput): Promise<User> {
     return this.userService.createUser({
       name: data.name,
-      email: data.email,
+      email: data.email.toLowerCase().trim(),
       username: data.username,
       password: data.password,
       passwordConfirmation: data.passwordConfirmation,
@@ -33,10 +35,10 @@ class UserResolver {
     });
   }
 
-  // TODO: finalizar busca de usuários com roles
-  // @ResolveProperty()
-  // public async role(@Parent() parent): Promise<Role> {
-  //   return 1;
-  // }
+  @ResolveField(() => Role)
+  public async role(@Parent() parent): Promise<Role> {
+    return this.roleRepository.findOne(parent.roleId);
+  }
 }
+
 export default UserResolver;
