@@ -47,7 +47,9 @@ export class UserService {
   async deleteUser(userId: number) {
     const result = await this.userRepository.delete({ id: userId });
     if (result.affected === 0) {
-      throw new NotFoundException('Não foi encontrado um usuário com o ID informado');
+      throw new NotFoundException(
+        'Não foi encontrado um usuário com o ID informado',
+      );
     }
   }
 

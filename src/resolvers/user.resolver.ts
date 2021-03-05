@@ -1,6 +1,13 @@
-import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  Mutation,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
 import User from 'src/entities/User';
-import UserInput from './input/user.input'
+import UserInput from './input/user.input';
 import { UserService } from 'src/services/users.service';
 import Role from 'src/entities/Role';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -19,7 +26,9 @@ class UserResolver {
   }
 
   @Query(() => User, { nullable: true })
-  public async getUser(@Args('id', { type: () => Number }) id: number): Promise<User> {
+  public async getUser(
+    @Args('id', { type: () => Number }) id: number,
+  ): Promise<User> {
     return this.userService.findUserById(id);
   }
 
@@ -31,7 +40,7 @@ class UserResolver {
       username: data.username,
       password: data.password,
       passwordConfirmation: data.passwordConfirmation,
-      roleId: data.role.connect.id
+      roleId: data.role.connect.id,
     });
   }
 
