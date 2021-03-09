@@ -4,19 +4,18 @@ import {
   UnauthorizedException,
   NotFoundException,
 } from '@nestjs/common';
-import { UserRepository } from '../repositories/users.repository';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateUserDto } from '../dtos/users/create-user.dto';
-import User from '../entities/User';
-import { UserRole } from '../helpers/enum/user-roles.enum';
-import { CredentialsDto } from '../dtos/auth/credentials.dto';
 import { JwtService } from '@nestjs/jwt';
 import { MailerService } from '@nestjs-modules/mailer';
 import { randomBytes } from 'crypto';
+import { UserRepository } from '../repositories/users.repository';
+import { CreateUserDto } from '../dtos/users/create-user.dto';
+import User from '../entities/User';
+import { CredentialsDto } from '../dtos/auth/credentials.dto';
 import { ChangePasswordDto } from '../dtos/auth/change-password.dto';
 
 @Injectable()
-export class AuthService {
+export default class AuthService {
   constructor(
     @InjectRepository(UserRepository)
     private userRepository: UserRepository,
@@ -25,12 +24,10 @@ export class AuthService {
   ) {}
 
   async signUp(createUserDto: CreateUserDto): Promise<User> {
-    if (createUserDto.password != createUserDto.passwordConfirmation) {
+    if (createUserDto.password !== createUserDto.passwordConfirmation) {
       throw new UnprocessableEntityException('As senhas não conferem');
     } else {
-      const user = await this.userRepository.createUser(
-        createUserDto,
-      );
+      const user = await this.userRepository.createUser(createUserDto);
       const mail = {
         to: user.email,
         from: 'noreply@application.com',
@@ -45,7 +42,7 @@ export class AuthService {
     }
   }
 
-  async signIn(credentialsDto: CredentialsDto) {
+  async signIn(credentialsDto: CredentialsDto): Promise<{ token: string }> {
     const user = await this.userRepository.checkCredentials(credentialsDto);
 
     if (user === null) {
@@ -95,7 +92,7 @@ export class AuthService {
   ): Promise<void> {
     const { password, passwordConfirmation } = changePasswordDto;
 
-    if (password != passwordConfirmation)
+    if (password !== passwordConfirmation)
       throw new UnprocessableEntityException('As senhas não conferem');
 
     await this.userRepository.changePassword(id, password);
@@ -113,10 +110,6 @@ export class AuthService {
     );
     if (!user) throw new NotFoundException('Token inválido.');
 
-    try {
-      await this.changePassword(user.id.toString(), changePasswordDto);
-    } catch (error) {
-      throw error;
-    }
+    await this.changePassword(user.id.toString(), changePasswordDto);
   }
 }

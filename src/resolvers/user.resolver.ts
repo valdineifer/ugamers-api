@@ -7,11 +7,11 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 import User from 'src/entities/User';
-import UserInput from './input/user.input';
-import { UserService } from 'src/services/users.service';
+import UserService from 'src/services/users.service';
 import Role from 'src/entities/Role';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import UserInput from './input/user.input';
 
 @Resolver(() => User)
 class UserResolver {
@@ -45,7 +45,7 @@ class UserResolver {
   }
 
   @ResolveField(() => Role)
-  public async role(@Parent() parent): Promise<Role> {
+  public async role(@Parent() parent: User): Promise<Role> {
     return this.roleRepository.findOne(parent.roleId);
   }
 }

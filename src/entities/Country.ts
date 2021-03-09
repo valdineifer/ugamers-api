@@ -1,9 +1,15 @@
-import { Field, ObjectType } from "@nestjs/graphql";
-import {BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
-import User from "./User";
+import { Field, ObjectType } from '@nestjs/graphql';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import User from './User';
 
 @ObjectType()
-@Entity({name: 'country'})
+@Entity({ name: 'country' })
 export default class Country extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
@@ -17,12 +23,11 @@ export default class Country extends BaseEntity {
   @Column()
   name: string;
 
-
   // Associations
 
   @OneToMany(
     () => User,
-    user => user.countryConnection
+    user => user.countryConnection,
   )
   userConnection: Promise<User[]>;
 }

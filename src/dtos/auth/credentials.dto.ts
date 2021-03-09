@@ -1,4 +1,5 @@
-export class CredentialsDto {
+export default class CredentialsDto {
   email: string;
+
   password: string;
 }

@@ -2,7 +2,7 @@ import { MailerOptions } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import * as path from 'path';
 
-export const mailerConfig: MailerOptions = {
+const mailerConfig: MailerOptions = {
   template: {
     dir: path.resolve(__dirname, '..', '..', 'templates'),
     adapter: new HandlebarsAdapter(),
@@ -13,3 +13,5 @@ export const mailerConfig: MailerOptions = {
   },
   transport: `smtps://user@domain.com:pass@smtp.domain.com`,
 };
+
+export default mailerConfig;

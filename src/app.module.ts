@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { GraphQLModule } from '@nestjs/graphql';
-import { typeOrmConfig } from './configs/typeorm.config';
-import { UsersModule } from './modules/users.module';
-import { LoggerInterceptor } from './interceptors/logger.interceptor';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { WinstonModule } from 'nest-winston';
-import { winstonConfig } from './configs/winston.config';
 import { MailerModule } from '@nestjs-modules/mailer';
-import { mailerConfig } from './configs/mailer.config';
+import typeOrmConfig from './configs/typeorm.config';
+import UsersModule from './modules/users.module';
+import LoggerInterceptor from './interceptors/logger.interceptor';
+import winstonConfig from './configs/winston.config';
+import mailerConfig from './configs/mailer.config';
 
 @Module({
   imports: [
@@ -30,4 +30,4 @@ import { mailerConfig } from './configs/mailer.config';
     },
   ],
 })
-export class AppModule {}
+export default class AppModule {}

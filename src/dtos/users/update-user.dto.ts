@@ -1,5 +1,6 @@
 import { IsString, IsEmail, IsOptional } from 'class-validator';
-export class UpdateUserDto {
+
+export default class UpdateUserDto {
   @IsOptional()
   @IsString({
     message: 'Informe um nome de usuário válido',

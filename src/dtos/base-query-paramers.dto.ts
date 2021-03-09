@@ -1,5 +1,7 @@
-export abstract class BaseQueryParametersDto {
+export default abstract class BaseQueryParametersDto {
   sort: string;
+
   page: number;
+
   limit: number;
 }

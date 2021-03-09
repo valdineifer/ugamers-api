@@ -3,23 +3,22 @@ import {
   Post,
   Body,
   ValidationPipe,
-  Get,
   UseGuards,
   Patch,
   Param,
   UnauthorizedException,
 } from '@nestjs/common';
-import { AuthService } from '../services/auth.service';
-import { CreateUserDto } from '../dtos/users/create-user.dto';
-import { CredentialsDto } from '../dtos/auth/credentials.dto';
 import { AuthGuard } from '@nestjs/passport';
+import AuthService from '../services/auth.service';
+import CreateUserDto from '../dtos/users/create-user.dto';
+import CredentialsDto from '../dtos/auth/credentials.dto';
 import User from '../entities/User';
-import { GetUser } from '../decorators/get-user.decorator';
-import { ChangePasswordDto } from '../dtos/auth/change-password.dto';
-import { UserRole } from '../helpers/enum/user-roles.enum';
+import GetUser from '../decorators/get-user.decorator';
+import ChangePasswordDto from '../dtos/auth/change-password.dto';
+import UserRole from '../helpers/enum/user-roles.enum';
 
 @Controller('auth')
-export class AuthController {
+export default class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('/signup')
@@ -36,11 +35,13 @@ export class AuthController {
   async signIn(
     @Body(ValidationPipe) credentiaslsDto: CredentialsDto,
   ): Promise<{ token: string }> {
-    return await this.authService.signIn(credentiaslsDto);
+    return this.authService.signIn(credentiaslsDto);
   }
 
   @Patch(':token')
-  async confirmEmail(@Param('token') token: string) {
+  async confirmEmail(
+    @Param('token') token: string,
+  ): Promise<{ message: string }> {
     await this.authService.confirmEmail(token);
     return {
       message: 'Email confirmado',
@@ -75,7 +76,7 @@ export class AuthController {
     @Param('id') id: string,
     @Body(ValidationPipe) changePasswordDto: ChangePasswordDto,
     @GetUser() user: User,
-  ) {
+  ): Promise<{ message: string }> {
     if (user.role.id !== UserRole.ADMIN && user.id.toString() !== id)
       throw new UnauthorizedException(
         'Você não tem permissão para realizar esta operação',
@@ -85,11 +86,5 @@ export class AuthController {
     return {
       message: 'Senha alterada',
     };
-  }
-
-  @Get('/me')
-  @UseGuards(AuthGuard())
-  getMe(@GetUser() user: User): User {
-    return user;
   }
 }

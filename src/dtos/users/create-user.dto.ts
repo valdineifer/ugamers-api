@@ -7,10 +7,10 @@ import {
   IsEnum,
 } from 'class-validator';
 import { ArgsType } from '@nestjs/graphql';
-import { UserRole } from 'src/helpers/enum/user-roles.enum';
+import UserRole from 'src/helpers/enum/user-roles.enum';
 
 @ArgsType()
-export class CreateUserDto {
+export default class CreateUserDto {
   @IsNotEmpty({
     message: 'Informe um endereço de email',
   })

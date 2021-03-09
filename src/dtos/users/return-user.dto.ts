@@ -1,6 +1,7 @@
 import User from '../../entities/User';
 
-export class ReturnUserDto {
+export default class ReturnUserDto {
   user: User;
+
   message: string;
 }

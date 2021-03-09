@@ -4,7 +4,7 @@ import {
 } from 'nest-winston';
 import * as winston from 'winston';
 
-export const winstonConfig: WinstonModuleOptions = {
+const winstonConfig: WinstonModuleOptions = {
   levels: winston.config.npm.levels,
   level: 'verbose',
   transports: [
@@ -21,3 +21,5 @@ export const winstonConfig: WinstonModuleOptions = {
     }),
   ],
 };
+
+export default winstonConfig;

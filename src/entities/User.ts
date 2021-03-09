@@ -70,26 +70,25 @@ export default class User extends BaseEntity {
   @Field()
   @DeleteDateColumn()
   deletedAt: Date;
-  
+
   @Field(() => Role)
   role: Role;
-  
+
   @Field(() => Country)
   country: Country;
-
 
   // Associations
 
   @ManyToOne(
     () => Role,
-    role => role.userConnection
+    role => role.userConnection,
   )
   @JoinColumn({ name: 'roleId' })
   roleConnection: Promise<Role>;
 
   @ManyToOne(
     () => Country,
-    country => country.userConnection
+    country => country.userConnection,
   )
   @JoinColumn({ name: 'countryId' })
   countryConnection: Promise<Country>;

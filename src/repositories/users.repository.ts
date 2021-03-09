@@ -1,25 +1,25 @@
 import { EntityRepository, Repository } from 'typeorm';
-import User from '../entities/User';
-import { CreateUserDto } from '../dtos/users/create-user.dto';
-import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
 import {
   ConflictException,
   InternalServerErrorException,
 } from '@nestjs/common';
+import hashPassword from 'src/utils/hashPassword';
+import { CreateUserDto } from '../dtos/users/create-user.dto';
+import User from '../entities/User';
 import { CredentialsDto } from '../dtos/auth/credentials.dto';
 import { FindUsersQueryDto } from '../dtos/users/find-users-query-dto';
 
 @EntityRepository(User)
-export class UserRepository extends Repository<User> {
+export default class UserRepository extends Repository<User> {
   async findUsers(
     queryDto: FindUsersQueryDto,
   ): Promise<{ users: User[]; total: number }> {
-    queryDto.status = queryDto.status === undefined ? true : queryDto.status;
-    queryDto.page = queryDto.page < 1 ? 1 : queryDto.page;
-    queryDto.limit = queryDto.limit > 100 ? 100 : queryDto.limit;
+    const status = queryDto.status === undefined ? true : queryDto.status;
+    const page = queryDto.page < 1 ? 1 : queryDto.page;
+    const limit = queryDto.limit > 100 ? 100 : queryDto.limit;
 
-    const { email, name, status, role } = queryDto;
+    const { email, name, role } = queryDto;
     const query = this.createQueryBuilder('user');
     query.where('user.status = :status', { status });
 
@@ -34,8 +34,8 @@ export class UserRepository extends Repository<User> {
     if (role) {
       query.andWhere('user.role = :role', { role });
     }
-    query.skip((queryDto.page - 1) * queryDto.limit);
-    query.take(+queryDto.limit);
+    query.skip((page - 1) * limit);
+    query.take(+limit);
     query.orderBy(queryDto.sort ? JSON.parse(queryDto.sort) : undefined);
     query.select(['user.name', 'user.email', 'user.role', 'user.status']);
 
@@ -53,7 +53,7 @@ export class UserRepository extends Repository<User> {
     user.username = username;
     user.status = true;
     user.confirmationToken = crypto.randomBytes(32).toString('hex');
-    user.password = await this.hashPassword(password);
+    user.password = await hashPassword(password);
     user.roleId = roleId;
 
     try {
@@ -65,16 +65,20 @@ export class UserRepository extends Repository<User> {
         throw new ConflictException('Endereço de email já está em uso');
       } else {
         throw new InternalServerErrorException(
-          error, 'Erro ao salvar o usuário no banco de dados',
+          error,
+          'Erro ao salvar o usuário no banco de dados',
         );
       }
     }
   }
 
-  async changePassword(id: string, password: string) {
+  async changePassword(id: string, password: string): Promise<void> {
     const user = await this.findOne(id);
-    user.password = await this.hashPassword(password);
+
+    // TODO: add validation if user doesn't exists
+    user.password = await hashPassword(password);
     user.recoverToken = null;
+
     await user.save();
   }
 
@@ -84,13 +88,7 @@ export class UserRepository extends Repository<User> {
 
     if (user && (await user.checkPassword(password))) {
       return user;
-    } else {
-      return null;
     }
-  }
-
-  private async hashPassword(password: string): Promise<string> {
-    const salt = await bcrypt.genSaltSync(parseInt(process.env.SALT, 10))
-    return bcrypt.hash(password, salt);
+    return null;
   }
 }

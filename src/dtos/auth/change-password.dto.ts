@@ -1,6 +1,6 @@
 import { IsString, MinLength, MaxLength, Matches } from 'class-validator';
 
-export class ChangePasswordDto {
+export default class ChangePasswordDto {
   @IsString({
     message: 'Informe uma senha válida',
   })

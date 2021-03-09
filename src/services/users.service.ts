@@ -10,10 +10,9 @@ import User from '../entities/User';
 import { UpdateUserDto } from '../dtos/users/update-user.dto';
 
 @Injectable()
-export class UserService {
+export default class UserService {
   constructor(
-    @InjectRepository(UserRepository)
-    private userRepository: UserRepository,
+    @InjectRepository(UserRepository) private userRepository: UserRepository,
   ) {}
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
@@ -34,17 +33,18 @@ export class UserService {
     return user;
   }
 
-  async updateUser(updateUserDto: UpdateUserDto, id: number) {
+  async updateUser(updateUserDto: UpdateUserDto, id: number): Promise<User> {
     const result = await this.userRepository.update({ id }, updateUserDto);
+
     if (result.affected > 0) {
       const user = await this.findUserById(id);
       return user;
-    } else {
-      throw new NotFoundException('Usuário não encontrado');
     }
+
+    throw new NotFoundException('Usuário não encontrado');
   }
 
-  async deleteUser(userId: number) {
+  async deleteUser(userId: number): Promise<void> {
     const result = await this.userRepository.delete({ id: userId });
     if (result.affected === 0) {
       throw new NotFoundException(
