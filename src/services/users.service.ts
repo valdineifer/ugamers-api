@@ -4,10 +4,10 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserRepository } from '../repositories/users.repository';
-import { CreateUserDto } from '../dtos/users/create-user.dto';
+import UserRepository from '../repositories/users.repository';
+import CreateUserDto from '../dtos/users/create-user.dto';
 import User from '../entities/User';
-import { UpdateUserDto } from '../dtos/users/update-user.dto';
+import UpdateUserDto from '../dtos/users/update-user.dto';
 
 @Injectable()
 export default class UserService {
@@ -27,6 +27,14 @@ export default class UserService {
     const user = await this.userRepository.findOne(userId, {
       select: ['email', 'name', 'role', 'id'],
     });
+
+    if (!user) throw new NotFoundException('Usuário não encontrado');
+
+    return user;
+  }
+
+  async findUserByUsername(username: string): Promise<User> {
+    const user = await this.userRepository.findOne({ where: { username } });
 
     if (!user) throw new NotFoundException('Usuário não encontrado');
 

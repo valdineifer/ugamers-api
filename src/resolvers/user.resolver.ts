@@ -6,12 +6,27 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
+import * as bcrypt from 'bcrypt';
 import User from 'src/entities/User';
 import UserService from 'src/services/users.service';
 import Role from 'src/entities/Role';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import {
+  NotFoundException,
+  Req,
+  UnprocessableEntityException,
+} from '@nestjs/common';
+import { Request } from 'express'; // eslint-disable-line import/no-extraneous-dependencies
 import UserInput from './input/user.input';
+import LoginInput from './input/login.input';
+
+// TODO: verify if this is a good place for declare module and interface
+declare module 'express-session' {
+  interface Session {
+    userId: number;
+  }
+}
 
 @Resolver(() => User)
 class UserResolver {
@@ -42,6 +57,28 @@ class UserResolver {
       passwordConfirmation: data.passwordConfirmation,
       roleId: data.role.connect.id,
     });
+  }
+
+  @Mutation(() => User)
+  public async login(
+    @Args('data') data: LoginInput,
+    @Req() req: Request,
+  ): Promise<User> {
+    const user = await this.userService.findUserByUsername(data.username);
+
+    if (!user) {
+      throw new NotFoundException('Usuário não encontrado');
+    }
+
+    const valid = await bcrypt.compare(data.password, user.password);
+
+    if (!valid) {
+      throw new UnprocessableEntityException('Senha incorreta');
+    }
+
+    req.session.userId = user.id;
+
+    return user;
   }
 
   @ResolveField(() => Role)
