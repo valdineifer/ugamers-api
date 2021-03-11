@@ -1,4 +1,4 @@
-import { BaseQueryParametersDto } from '../base-query-paramers.dto';
+import BaseQueryParametersDto from '../base-query-paramers.dto';
 
 export default class FindUsersQueryDto extends BaseQueryParametersDto {
   name: string;

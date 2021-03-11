@@ -8,11 +8,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { MailerService } from '@nestjs-modules/mailer';
 import { randomBytes } from 'crypto';
-import { UserRepository } from '../repositories/users.repository';
-import { CreateUserDto } from '../dtos/users/create-user.dto';
+import UserRepository from '../repositories/users.repository';
+import CreateUserDto from '../dtos/users/create-user.dto';
 import User from '../entities/User';
-import { CredentialsDto } from '../dtos/auth/credentials.dto';
-import { ChangePasswordDto } from '../dtos/auth/change-password.dto';
+import CredentialsDto from '../dtos/auth/credentials.dto';
+import ChangePasswordDto from '../dtos/auth/change-password.dto';
 
 @Injectable()
 export default class AuthService {

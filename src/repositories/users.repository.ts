@@ -5,10 +5,10 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import hashPassword from 'src/utils/hashPassword';
-import { CreateUserDto } from '../dtos/users/create-user.dto';
+import CreateUserDto from '../dtos/users/create-user.dto';
 import User from '../entities/User';
-import { CredentialsDto } from '../dtos/auth/credentials.dto';
-import { FindUsersQueryDto } from '../dtos/users/find-users-query-dto';
+import CredentialsDto from '../dtos/auth/credentials.dto';
+import FindUsersQueryDto from '../dtos/users/find-users-query-dto';
 
 @EntityRepository(User)
 export default class UserRepository extends Repository<User> {
