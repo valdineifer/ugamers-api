@@ -7,6 +7,7 @@ import redis from 'redis';
 import connectRedis from 'connect-redis';
 import winstonConfig from './configs/winston.config';
 import AppModule from './app.module';
+import 'reflect-metadata';
 
 async function bootstrap() {
   dotenv.config();

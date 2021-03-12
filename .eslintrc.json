@@ -21,6 +21,12 @@
         "rules": {
           "import/no-cycle": "off"
         }
+      },
+      {
+        "files": ["**/seeds/*.ts"],
+        "rules": {
+          "class-methods-use-this": "off"
+        }
       }
     ],
     "parser": "@typescript-eslint/parser",
