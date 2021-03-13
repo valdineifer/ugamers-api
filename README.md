@@ -3,37 +3,30 @@
 ## Installation
 
 ```bash
-# do not run with yarn
-$ npm install
+# do not run with npm
+$ yarn install
 ```
 
-## Running the app
+## NPM Scripts
+The project have those following scripts (consider `npm run [command]` or `yarn [command]`):
 
-```bash
-# development
-$ npm run start
+| Command   | Description                                  |
+|-----------|----------------------------------------------|
+| prebuild  | Delete `/dist` folder for clean build        |
+| build     | Build project                                |
+| start     | Start project, same as `nest start`          |
+| start:dev | Start project and watch for changes, same as |
+| lint      | Run ESLint                                   |
+| lint:fix  | Run ESLint and try to fix automatically      |
 
-# watch mode
-$ npm run start:dev
-# or
-$ yarn start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
+### Database commands
+| Command                       | Description                            |
+|-------------------------------|----------------------------------------|
+| typeorm                       | Shorter command for TypeORM            |
+| db:fresh                      | Drop schema and run all migrations     |
+| db:fresh:seed                 | Do the command above and run all seeds |
+| db:seed:generate [SeederName] | Generate a seed                        |
+| db:seed:run                   | Run all seeds                          |
 
 ---
 
