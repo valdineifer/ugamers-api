@@ -25,9 +25,10 @@ async function bootstrap() {
 
   app.use(
     session({
-      name: 'qid',
+      name: process.env.SESSION_COOKIE,
       cookie: {
         httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24 * 30,
         sameSite: 'lax', // csrf
         secure: process.env.NODE_ENV === 'production', // cookie only works in https
       },

@@ -8,6 +8,7 @@ import typeOrmConfig from './configs/typeorm.config';
 import UsersModule from './modules/users.module';
 import LoggerInterceptor from './interceptors/logger.interceptor';
 import winstonConfig from './configs/winston.config';
+import { MyContext } from './types';
 // import mailerConfig from './configs/mailer.config';
 
 @Module({
@@ -18,6 +19,7 @@ import winstonConfig from './configs/winston.config';
     GraphQLModule.forRoot({
       autoSchemaFile: 'schema.gql',
       playground: true,
+      context: ({ req, res, redis }: MyContext): MyContext => ({ req, res, redis }),
     }),
     UsersModule,
     // AuthModule,

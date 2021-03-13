@@ -1,12 +1,20 @@
-import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  Context,
+  Mutation,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
 import * as bcrypt from 'bcrypt';
 import User from 'src/entities/User';
 import UserService from 'src/services/users.service';
 import Role from 'src/entities/Role';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { NotFoundException, Req, UnprocessableEntityException } from '@nestjs/common';
-import { Request } from 'express'; // eslint-disable-line import/no-extraneous-dependencies
+import { Logger, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import { MyContext } from 'src/types';
 import UserInput from './input/user.input';
 import LoginInput from './input/login.input';
 
@@ -47,7 +55,10 @@ class UserResolver {
   }
 
   @Mutation(() => User)
-  public async login(@Args('data') data: LoginInput, @Req() req: Request): Promise<User> {
+  public async login(
+    @Args('data') data: LoginInput,
+    @Context() { req }: MyContext,
+  ): Promise<User> {
     const user = await this.userService.findUserByUsername(data.username);
 
     if (!user) {
@@ -63,6 +74,31 @@ class UserResolver {
     req.session.userId = user.id;
 
     return user;
+  }
+
+  @Mutation(() => Boolean)
+  logout(@Context() { req, res }: MyContext): Promise<boolean> {
+    return new Promise((resolve) =>
+      req.session.destroy((err) => {
+        res.clearCookie(process.env.SESSION_COOKIE);
+        if (err) {
+          Logger.error(err);
+          resolve(false);
+          return;
+        }
+
+        resolve(true);
+      }),
+    );
+  }
+
+  @Query(() => User, { nullable: true })
+  public async me(@Context() { req }: MyContext): Promise<User | null> {
+    if (!req.session.userId) {
+      return null;
+    }
+
+    return this.userService.findUserById(req.session.userId);
   }
 
   @ResolveField(() => Role)

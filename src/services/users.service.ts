@@ -11,9 +11,7 @@ import UpdateUserDto from '../dtos/users/update-user.dto';
 
 @Injectable()
 export default class UserService {
-  constructor(
-    @InjectRepository(UserRepository) private userRepository: UserRepository,
-  ) {}
+  constructor(@InjectRepository(UserRepository) private userRepository: UserRepository) {}
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
     if (createUserDto.password !== createUserDto.passwordConfirmation) {
@@ -24,9 +22,7 @@ export default class UserService {
   }
 
   async findUserById(userId: number): Promise<User> {
-    const user = await this.userRepository.findOne(userId, {
-      select: ['email', 'name', 'role', 'id'],
-    });
+    const user = await this.userRepository.findOne(userId);
 
     if (!user) throw new NotFoundException('Usuário não encontrado');
 
@@ -55,9 +51,7 @@ export default class UserService {
   async deleteUser(userId: number): Promise<void> {
     const result = await this.userRepository.delete({ id: userId });
     if (result.affected === 0) {
-      throw new NotFoundException(
-        'Não foi encontrado um usuário com o ID informado',
-      );
+      throw new NotFoundException('Não foi encontrado um usuário com o ID informado');
     }
   }
 
