@@ -13,7 +13,6 @@ import {
 import * as bcrypt from 'bcrypt';
 import { ObjectType, Field } from '@nestjs/graphql';
 import Role from './Role';
-import Country from './Country';
 
 @ObjectType()
 @Entity({ name: 'user' })
@@ -56,10 +55,6 @@ export default class User extends BaseEntity {
   roleId: number;
 
   @Field()
-  @Column()
-  countryId: number;
-
-  @Field()
   @CreateDateColumn()
   createdAt: Date;
 
@@ -74,24 +69,11 @@ export default class User extends BaseEntity {
   @Field(() => Role)
   role: Role;
 
-  @Field(() => Country)
-  country: Country;
-
   // Associations
 
-  @ManyToOne(
-    () => Role,
-    role => role.userConnection,
-  )
+  @ManyToOne(() => Role, (role) => role.userConnection)
   @JoinColumn({ name: 'roleId' })
   roleConnection: Promise<Role>;
-
-  @ManyToOne(
-    () => Country,
-    country => country.userConnection,
-  )
-  @JoinColumn({ name: 'countryId' })
-  countryConnection: Promise<Country>;
 
   async checkPassword(password: string): Promise<boolean> {
     const hash = await bcrypt.hash(password, 10);

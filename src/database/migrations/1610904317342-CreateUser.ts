@@ -1,9 +1,4 @@
-import {
-  MigrationInterface,
-  QueryRunner,
-  Table,
-  TableForeignKey,
-} from 'typeorm';
+import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
 
 export default class CreateUser1610904317342 implements MigrationInterface {
   private table = new Table({
@@ -38,6 +33,7 @@ export default class CreateUser1610904317342 implements MigrationInterface {
         name: 'status',
         type: 'boolean',
         isNullable: false,
+        default: true,
       },
       {
         name: 'password',
@@ -61,11 +57,6 @@ export default class CreateUser1610904317342 implements MigrationInterface {
         type: 'int',
         default: 1, // Default role: User
         isNullable: false,
-      },
-      {
-        name: 'countryId',
-        type: 'int',
-        isNullable: true,
       },
       {
         name: 'createdAt',
@@ -94,17 +85,9 @@ export default class CreateUser1610904317342 implements MigrationInterface {
     onDelete: 'SET DEFAULT',
   });
 
-  private countryFk = new TableForeignKey({
-    columnNames: ['countryId'],
-    referencedColumnNames: ['id'],
-    referencedTableName: 'country',
-    onDelete: 'SET NULL',
-  });
-
   public async up(queryRunner: QueryRunner): Promise<any> {
     await queryRunner.createTable(this.table);
     await queryRunner.createForeignKey('user', this.roleFk);
-    await queryRunner.createForeignKey('user', this.countryFk);
   }
 
   public async down(queryRunner: QueryRunner): Promise<any> {

@@ -2,6 +2,7 @@ import { define } from 'typeorm-seeding';
 import Faker from 'faker';
 import User from '../../entities/User';
 import UserRole from '../../helpers/enum/user-roles.enum';
+import Role from '../../entities/Role';
 
 Faker.locale = 'pt_BR';
 
@@ -18,4 +19,13 @@ define(User, (faker: typeof Faker) => {
   user.roleId = UserRole.USER;
 
   return user;
+});
+
+define(Role, (faker: typeof Faker) => {
+  const role = new Role();
+
+  role.id = faker.random.number(3);
+  role.description = faker.name.jobArea();
+
+  return role;
 });

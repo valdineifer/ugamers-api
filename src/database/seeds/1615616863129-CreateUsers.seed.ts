@@ -9,6 +9,7 @@ export default class CreateUsers implements Seeder {
       username: 'valdinei',
       email: 'valdineifer@outlook.com',
       roleId: UserRole.ADMIN,
+      status: true,
       password: '$2y$10$k9Rjj1VHyE7zUHZ9ktpAdOUUPsrxPu2Mz5A9I9wDAqGJDveaTTS76',
     });
   }

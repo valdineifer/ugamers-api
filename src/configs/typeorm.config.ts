@@ -2,7 +2,7 @@ import * as path from 'path';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
 // TODO: verificar necessidade deste arquivo de configuração
-const typeOrmConfig: TypeOrmModuleOptions = {
+const typeOrmConfig: TypeOrmModuleOptions & { seeds: string[]; factories: string[] } = {
   type: 'postgres',
   host: process.env.TYPEORM_HOST || '127.0.0.1',
   url: process.env.TYPEORM_URL,
@@ -11,9 +11,7 @@ const typeOrmConfig: TypeOrmModuleOptions = {
   password: process.env.TYPEORM_PASSWORD,
   database: process.env.TYPEORM_DATABASE || 'ugamers',
   entities: [path.resolve(__dirname, '..', 'entities', '*.{ts,js}')],
-  migrations: [
-    path.resolve(__dirname, '..', 'database', 'migrations', '*.{ts,js}'),
-  ],
+  migrations: [path.resolve(__dirname, '..', 'database', 'migrations', '*.{ts,js}')],
   migrationsRun: false,
   synchronize: false,
   logging: false,
@@ -21,6 +19,8 @@ const typeOrmConfig: TypeOrmModuleOptions = {
     entitiesDir: path.resolve(__dirname, '..', 'entities'),
     migrationsDir: path.resolve(__dirname, '..', 'database', 'migrations'),
   },
+  seeds: [path.resolve(__dirname, '..', 'database', 'seeds', '*.{ts,js}')],
+  factories: [path.resolve(__dirname, '..', 'database', 'factories', '*.{ts,js}')],
 };
 
 export default typeOrmConfig;
