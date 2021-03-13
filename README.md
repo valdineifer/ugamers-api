@@ -10,14 +10,14 @@ $ yarn install
 ## NPM Scripts
 The project have those following scripts (consider `npm run [command]` or `yarn [command]`):
 
-| Command   | Description                                  |
-|-----------|----------------------------------------------|
-| prebuild  | Delete `/dist` folder for clean build        |
-| build     | Build project                                |
-| start     | Start project, same as `nest start`          |
-| start:dev | Start project and watch for changes, same as |
-| lint      | Run ESLint                                   |
-| lint:fix  | Run ESLint and try to fix automatically      |
+| Command   | Description                                                  |
+|-----------|--------------------------------------------------------------|
+| prebuild  | Delete `/dist` folder for clean build                        |
+| build     | Build project                                                |
+| start     | Start project, same as `nest start`                          |
+| start:dev | Start project and watch for changes, same as `nest start -w` |
+| lint      | Run ESLint                                                   |
+| lint:fix  | Run ESLint and try to fix automatically                      |
 
 ### Database commands
 | Command                       | Description                            |
