@@ -20,7 +20,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --config src/configs/typeorm.config.ts",
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js -f src/configs/typeorm.config.ts",
     "typeorm2": "node --require ts-node/register ./node_modules/typeorm/cli.js",
     "db:fresh": "npm run typeorm schema:drop && npm run typeorm migration:run",
     "db:seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config",
