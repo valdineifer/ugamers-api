@@ -1,21 +1,27 @@
-import dotenv from 'dotenv';
+import 'dotenv/config';
 
 import { NestFactory } from '@nestjs/core';
 import { WinstonModule } from 'nest-winston';
 import session from 'express-session';
-import redis from 'redis';
+import Redis from 'ioredis';
 import connectRedis from 'connect-redis';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import winstonConfig from './configs/winston.config';
 import AppModule from './app.module';
 import 'reflect-metadata';
 
 async function bootstrap() {
-  dotenv.config();
   const logger = WinstonModule.createLogger(winstonConfig);
-  const app = await NestFactory.create(AppModule, { logger });
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, { logger });
 
   const RedisStore = connectRedis(session);
-  const redisClient = redis.createClient();
+  const redis = new Redis({
+    host: process.env.REDIS_URL,
+    port: Number(process.env.REDIS_PORT),
+    password: process.env.REDIS_PASSWORD,
+  });
+
+  app.set('trust proxy', 1);
 
   app.use(
     session({
@@ -27,7 +33,7 @@ async function bootstrap() {
       },
       resave: false,
       store: new RedisStore({
-        client: redisClient,
+        client: redis,
         disableTouch: true,
       }),
       saveUninitialized: false,

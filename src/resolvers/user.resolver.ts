@@ -1,22 +1,11 @@
-import {
-  Args,
-  Mutation,
-  Parent,
-  Query,
-  ResolveField,
-  Resolver,
-} from '@nestjs/graphql';
+import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import * as bcrypt from 'bcrypt';
 import User from 'src/entities/User';
 import UserService from 'src/services/users.service';
 import Role from 'src/entities/Role';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import {
-  NotFoundException,
-  Req,
-  UnprocessableEntityException,
-} from '@nestjs/common';
+import { NotFoundException, Req, UnprocessableEntityException } from '@nestjs/common';
 import { Request } from 'express'; // eslint-disable-line import/no-extraneous-dependencies
 import UserInput from './input/user.input';
 import LoginInput from './input/login.input';
@@ -41,9 +30,7 @@ class UserResolver {
   }
 
   @Query(() => User, { nullable: true })
-  public async getUser(
-    @Args('id', { type: () => Number }) id: number,
-  ): Promise<User> {
+  public async getUser(@Args('id', { type: () => Number }) id: number): Promise<User> {
     return this.userService.findUserById(id);
   }
 
@@ -55,15 +42,12 @@ class UserResolver {
       username: data.username,
       password: data.password,
       passwordConfirmation: data.passwordConfirmation,
-      roleId: data.role.connect.id,
+      roleId: data.role.id,
     });
   }
 
   @Mutation(() => User)
-  public async login(
-    @Args('data') data: LoginInput,
-    @Req() req: Request,
-  ): Promise<User> {
+  public async login(@Args('data') data: LoginInput, @Req() req: Request): Promise<User> {
     const user = await this.userService.findUserByUsername(data.username);
 
     if (!user) {

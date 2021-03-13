@@ -1,17 +1,11 @@
+/* eslint-disable max-classes-per-file */
 import { InputType, Field } from '@nestjs/graphql';
 
-// @InputType()
-// class UserRoleConnectInput {
-//   @Field()
-//   readonly id: number;
-// }
-
-// @InputType()
-// class UserRoleInput {
-//   @Field()
-//   readonly connect: UserRoleConnectInput;
-// }
-
+@InputType()
+class UserRoleInput {
+  @Field()
+  readonly id: number;
+}
 @InputType()
 class UserInput {
   @Field()
@@ -25,11 +19,7 @@ class UserInput {
 
   // TODO: verify if this is the right approach
   @Field()
-  readonly role: {
-    connect: {
-      id: number;
-    };
-  };
+  readonly role: UserRoleInput;
 
   @Field()
   readonly password: string;
