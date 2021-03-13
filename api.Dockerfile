@@ -10,7 +10,8 @@ RUN apk add python3 g++ make
 
 # copy the app, note .dockerignore
 COPY . /usr/src/ugamers-api/
-RUN npm install
+RUN npm install -g yarn
+RUN yarn install
 
 # email configuration
 RUN apk add msmtp
