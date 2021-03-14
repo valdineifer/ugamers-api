@@ -6,6 +6,7 @@ import session from 'express-session';
 import Redis from 'ioredis';
 import connectRedis from 'connect-redis';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import helmet from 'helmet';
 import winstonConfig from './configs/winston.config';
 import AppModule from './app.module';
 import 'reflect-metadata';
@@ -24,6 +25,7 @@ async function bootstrap() {
   app.set('trust proxy', 1);
 
   app.use(
+    helmet(),
     session({
       name: process.env.SESSION_COOKIE,
       cookie: {

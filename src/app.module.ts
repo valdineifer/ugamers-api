@@ -20,6 +20,10 @@ import { MyContext } from './types';
       autoSchemaFile: 'schema.gql',
       playground: true,
       context: ({ req, res, redis }: MyContext): MyContext => ({ req, res, redis }),
+      cors: {
+        origin: process.env.CLIENT_URL,
+        credentials: true,
+      },
     }),
     UsersModule,
     // AuthModule,

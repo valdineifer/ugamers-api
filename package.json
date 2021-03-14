@@ -45,6 +45,7 @@
     "faker": "^5.4.0",
     "graphql": "^15.5.0",
     "graphql-tools": "^7.0.4",
+    "helmet": "^4.4.1",
     "ioredis": "^4.23.0",
     "nest-winston": "^1.4.0",
     "pg": "^8.5.1",
