@@ -13,7 +13,7 @@ import UserRole from 'src/helpers/enum/user-roles.enum';
 
 @InputType()
 class UserRoleInput {
-  @IsNotEmpty({ message: ApiErrors.nullField('id').message })
+  @IsNotEmpty({ message: ApiErrors.nullField })
   @IsEnum(UserRole, { message: 'O escopo (role) informado não é válido' })
   @Field()
   readonly id: number;
@@ -21,22 +21,22 @@ class UserRoleInput {
 
 @InputType()
 class UserInput {
-  @IsNotEmpty({ message: ApiErrors.nullField('email').message })
-  @IsEmail({}, { message: ApiErrors.invalidEmail.message })
-  @MaxLength(200, { message: ApiErrors.tooLongField('email', 200).message })
+  @IsNotEmpty({ message: ApiErrors.nullField })
+  @IsEmail({}, { message: ApiErrors.invalidEmail })
+  @MaxLength(200, { message: ApiErrors.tooLongField })
   @Field()
   readonly email: string;
 
-  @IsNotEmpty({ message: ApiErrors.nullField('name').message })
-  @MinLength(3, { message: ApiErrors.tooShortField('name', 3).message })
-  @MaxLength(200, { message: ApiErrors.tooLongField('name', 200).message })
+  @IsNotEmpty({ message: ApiErrors.nullField })
+  @MinLength(3, { message: ApiErrors.tooShortField })
+  @MaxLength(200, { message: ApiErrors.tooLongField })
   @Field()
   readonly name: string;
 
-  @IsNotEmpty({ message: ApiErrors.nullField('username').message })
-  @MinLength(3, { message: ApiErrors.tooShortField('username', 3).message })
-  @MaxLength(42, { message: ApiErrors.tooLongField('username', 42).message })
-  @Matches(/^[a-z0-9_-]{3,42}$/, { message: ApiErrors.invalidUsername.message })
+  @IsNotEmpty({ message: ApiErrors.nullField })
+  @MinLength(3, { message: ApiErrors.tooShortField })
+  @MaxLength(42, { message: ApiErrors.tooLongField })
+  @Matches(/^[a-z0-9_-]{3,42}$/, { message: ApiErrors.invalidUsername })
   @Field()
   readonly username: string;
 
@@ -44,20 +44,20 @@ class UserInput {
   @Field()
   readonly role: UserRoleInput;
 
-  @IsNotEmpty({ message: ApiErrors.nullField('password').message })
-  @MinLength(8, { message: ApiErrors.tooShortField('password', 8).message })
+  @IsNotEmpty({ message: ApiErrors.nullField })
+  @MinLength(8, { message: ApiErrors.tooShortField })
   @Matches(
     /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*\-+âáàãéèêíìîôòóúùû]).{8,}$/,
-    { message: ApiErrors.invalidPassword.message },
+    { message: ApiErrors.invalidPassword },
   )
   @Field()
   readonly password: string;
 
-  @IsNotEmpty({ message: ApiErrors.nullField('passwordConfirmation').message })
-  @MinLength(8, { message: ApiErrors.tooShortField('passwordConfirmation', 8).message })
+  @IsNotEmpty({ message: ApiErrors.nullField })
+  @MinLength(8, { message: ApiErrors.tooShortField })
   @Matches(
     /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*\-+âáàãéèêíìîôòóúùû]).{8,}$/,
-    { message: ApiErrors.invalidPassword.message },
+    { message: ApiErrors.invalidPassword },
   )
   @Field()
   readonly passwordConfirmation: string;

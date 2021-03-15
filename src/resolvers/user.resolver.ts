@@ -70,14 +70,14 @@ class UserResolver {
 
     if (!user) {
       return {
-        errors: [ApiErrors.userNotFound('username')],
+        errors: [{ field: 'username', message: ApiErrors.userNotFound('username') }],
       };
     }
 
     const valid = await bcrypt.compare(data.password, user.password);
 
     if (!valid) {
-      return { errors: [ApiErrors.passwordDiff] };
+      return { errors: [{ field: 'password', message: ApiErrors.passwordDiff }] };
     }
 
     req.session.userId = user.id;
