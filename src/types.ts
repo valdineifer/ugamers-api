@@ -1,4 +1,6 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
+/* eslint-disable max-classes-per-file */
+/* eslint-disable import/no-extraneous-dependencies */
+import { Field, ObjectType } from '@nestjs/graphql';
 import { Request, Response } from 'express';
 import { Session } from 'express-session';
 import { Redis } from 'ioredis';
@@ -8,3 +10,12 @@ export type MyContext = {
   res: Response;
   redis: Redis;
 };
+
+@ObjectType()
+export class FieldError {
+  @Field()
+  field: string;
+
+  @Field()
+  message: string;
+}

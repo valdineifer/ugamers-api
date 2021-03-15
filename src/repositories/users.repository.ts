@@ -1,9 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
 import * as crypto from 'crypto';
-import {
-  ConflictException,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { ConflictException, InternalServerErrorException } from '@nestjs/common';
 import hashPassword from 'src/utils/hashPassword';
 import CreateUserDto from '../dtos/users/create-user.dto';
 import User from '../entities/User';

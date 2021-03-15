@@ -17,6 +17,7 @@ export default class LoggerInterceptor implements NestInterceptor {
     return next.handle();
   }
 
+  // TODO: refactor Logger interceptor
   private log(req) {
     if (req) {
       const body = { ...req.body };

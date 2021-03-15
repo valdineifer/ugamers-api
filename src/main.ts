@@ -7,6 +7,8 @@ import Redis from 'ioredis';
 import connectRedis from 'connect-redis';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import helmet from 'helmet';
+import { ValidationError, ValidationPipe } from '@nestjs/common';
+import { ApolloError } from 'apollo-server-express';
 import winstonConfig from './configs/winston.config';
 import AppModule from './app.module';
 import 'reflect-metadata';
@@ -24,8 +26,20 @@ async function bootstrap() {
 
   app.set('trust proxy', 1);
 
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      exceptionFactory: (errors: ValidationError[]) =>
+        new ApolloError('VALIDATION_ERROR', 'VALIDATION_ERROR', {
+          invalidArgs: errors,
+        }),
+    }),
+  );
+
   app.use(
-    helmet(),
+    helmet({
+      contentSecurityPolicy: process.env.NODE_ENV === 'production' ? undefined : false,
+    }),
     session({
       name: process.env.SESSION_COOKIE,
       cookie: {

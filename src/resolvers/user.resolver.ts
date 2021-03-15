@@ -1,7 +1,10 @@
+// eslint-disable-next-line max-classes-per-file
 import {
   Args,
   Context,
+  Field,
   Mutation,
+  ObjectType,
   Parent,
   Query,
   ResolveField,
@@ -13,16 +16,26 @@ import UserService from 'src/services/users.service';
 import Role from 'src/entities/Role';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Logger, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
-import { MyContext } from 'src/types';
+import { Logger } from '@nestjs/common';
+import { FieldError, MyContext } from '../types';
 import UserInput from './input/user.input';
 import LoginInput from './input/login.input';
+import { ApiErrors } from '../constants/errorConstants';
+import IdInput from './input/id.input';
 
 // TODO: verify if this is a good place for declare module and interface
 declare module 'express-session' {
   interface Session {
     userId: number;
   }
+}
+@ObjectType()
+class UserResponse {
+  @Field(() => [FieldError], { nullable: true })
+  errors?: FieldError[];
+
+  @Field(() => User, { nullable: true })
+  user?: User;
 }
 
 @Resolver(() => User)
@@ -32,48 +45,44 @@ class UserResolver {
     @InjectRepository(Role) private readonly roleRepository: Repository<Role>,
   ) {}
 
-  @Query(() => [User])
-  public async getUsers(): Promise<User[]> {
-    return this.userService.findUsers();
+  @Query(() => UserResponse, { nullable: true })
+  public async getUser(@Args() args: IdInput): Promise<UserResponse> {
+    return { user: await this.userService.findUserById(args.id) };
   }
 
-  @Query(() => User, { nullable: true })
-  public async getUser(@Args('id', { type: () => Number }) id: number): Promise<User> {
-    return this.userService.findUserById(id);
-  }
-
-  @Mutation(() => User)
-  public async createUser(@Args('data') data: UserInput): Promise<User> {
-    return this.userService.createUser({
-      name: data.name,
+  @Mutation(() => UserResponse)
+  public async createUser(@Args('data') data: UserInput): Promise<UserResponse> {
+    const userCreated = await this.userService.createUser({
+      ...data,
       email: data.email.toLowerCase().trim(),
-      username: data.username,
-      password: data.password,
-      passwordConfirmation: data.passwordConfirmation,
       roleId: data.role.id,
     });
+
+    return { user: userCreated };
   }
 
-  @Mutation(() => User)
+  @Mutation(() => UserResponse)
   public async login(
     @Args('data') data: LoginInput,
     @Context() { req }: MyContext,
-  ): Promise<User> {
+  ): Promise<UserResponse> {
     const user = await this.userService.findUserByUsername(data.username);
 
     if (!user) {
-      throw new NotFoundException('Usuário não encontrado');
+      return {
+        errors: [ApiErrors.userNotFound('username')],
+      };
     }
 
     const valid = await bcrypt.compare(data.password, user.password);
 
     if (!valid) {
-      throw new UnprocessableEntityException('Senha incorreta');
+      return { errors: [ApiErrors.passwordDiff] };
     }
 
     req.session.userId = user.id;
 
-    return user;
+    return { user };
   }
 
   @Mutation(() => Boolean)
@@ -92,13 +101,15 @@ class UserResolver {
     );
   }
 
-  @Query(() => User, { nullable: true })
-  public async me(@Context() { req }: MyContext): Promise<User | null> {
+  @Query(() => UserResponse, { nullable: true })
+  public async me(@Context() { req }: MyContext): Promise<UserResponse> {
     if (!req.session.userId) {
       return null;
     }
 
-    return this.userService.findUserById(req.session.userId);
+    const user = await this.userService.findUserById(req.session.userId);
+
+    return { user };
   }
 
   @ResolveField(() => Role)
