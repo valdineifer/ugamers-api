@@ -9,7 +9,6 @@ import UsersModule from './modules/users.module';
 import LoggerInterceptor from './interceptors/logger.interceptor';
 import winstonConfig from './configs/winston.config';
 import { MyContext } from './types';
-import graphQLError from './utils/graphQLError';
 // import mailerConfig from './configs/mailer.config';
 
 @Module({
@@ -25,7 +24,6 @@ import graphQLError from './utils/graphQLError';
         origin: process.env.CLIENT_URL,
         credentials: true,
       },
-      formatError: graphQLError,
     }),
     UsersModule,
   ],

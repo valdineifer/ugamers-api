@@ -12,6 +12,7 @@ import { ApolloError } from 'apollo-server-express';
 import winstonConfig from './configs/winston.config';
 import AppModule from './app.module';
 import 'reflect-metadata';
+import { ApolloErrorFilter } from './filters/apollo-error.filter';
 
 async function bootstrap() {
   const logger = WinstonModule.createLogger(winstonConfig);
@@ -25,6 +26,8 @@ async function bootstrap() {
   });
 
   app.set('trust proxy', 1);
+
+  app.useGlobalFilters(new ApolloErrorFilter());
 
   app.useGlobalPipes(
     new ValidationPipe({

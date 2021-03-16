@@ -16,6 +16,12 @@ export class FieldError {
   @Field()
   field: string;
 
-  @Field()
-  message: string;
+  @Field(() => [String])
+  message: string[];
+}
+
+@ObjectType()
+export class InputResponse {
+  @Field(() => [FieldError], { nullable: true })
+  errors?: FieldError[];
 }

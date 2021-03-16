@@ -17,7 +17,7 @@ import Role from 'src/entities/Role';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Logger } from '@nestjs/common';
-import { FieldError, MyContext } from '../types';
+import { FieldError, InputResponse, MyContext } from '../types';
 import UserInput from './input/user.input';
 import LoginInput from './input/login.input';
 import { ApiErrors } from '../constants/errorConstants';
@@ -30,10 +30,7 @@ declare module 'express-session' {
   }
 }
 @ObjectType()
-class UserResponse {
-  @Field(() => [FieldError], { nullable: true })
-  errors?: FieldError[];
-
+class UserResponse extends InputResponse {
   @Field(() => User, { nullable: true })
   user?: User;
 }
@@ -70,14 +67,14 @@ class UserResolver {
 
     if (!user) {
       return {
-        errors: [{ field: 'username', message: ApiErrors.userNotFound('username') }],
+        errors: [{ field: 'username', message: [ApiErrors.userNotFound('username')] }],
       };
     }
 
     const valid = await bcrypt.compare(data.password, user.password);
 
     if (!valid) {
-      return { errors: [{ field: 'password', message: ApiErrors.passwordDiff }] };
+      return { errors: [{ field: 'password', message: [ApiErrors.passwordDiff] }] };
     }
 
     req.session.userId = user.id;
