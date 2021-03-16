@@ -17,7 +17,7 @@ import Role from 'src/entities/Role';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Logger } from '@nestjs/common';
-import { FieldError, InputResponse, MyContext } from '../types';
+import { InputResponse, MyContext } from '../types';
 import UserInput from './input/user.input';
 import LoginInput from './input/login.input';
 import { ApiErrors } from '../constants/errorConstants';
