@@ -49,6 +49,12 @@ class UserResolver {
 
   @Mutation(() => UserResponse)
   public async createUser(@Args('data') data: UserInput): Promise<UserResponse> {
+    if (data.password !== data.passwordConfirmation) {
+      return {
+        errors: [{ field: 'passwordConfirmation', message: ApiErrors.passwordDiff }],
+      };
+    }
+
     const userCreated = await this.userService.createUser({
       ...data,
       email: data.email.toLowerCase().trim(),
@@ -67,14 +73,14 @@ class UserResolver {
 
     if (!user) {
       return {
-        errors: [{ field: 'username', message: [ApiErrors.userNotFound('username')] }],
+        errors: [{ field: 'username', message: ApiErrors.userNotFound('username') }],
       };
     }
 
     const valid = await bcrypt.compare(data.password, user.password);
 
     if (!valid) {
-      return { errors: [{ field: 'password', message: [ApiErrors.passwordDiff] }] };
+      return { errors: [{ field: 'password', message: ApiErrors.passwordDiff }] };
     }
 
     req.session.userId = user.id;

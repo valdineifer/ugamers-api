@@ -32,6 +32,7 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
+      stopAtFirstError: true,
       exceptionFactory: (errors: ValidationError[]) =>
         new ApolloError('VALIDATION_ERROR', 'VALIDATION_ERROR', {
           invalidArgs: errors,

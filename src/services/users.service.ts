@@ -1,5 +1,7 @@
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import SemanticException from 'src/exceptions/semantic.exception';
+import { ApiErrors } from 'src/constants/errorConstants';
 import UserRepository from '../repositories/users.repository';
 import CreateUserDto from '../dtos/users/create-user.dto';
 import User from '../entities/User';
@@ -9,12 +11,18 @@ import UpdateUserDto from '../dtos/users/update-user.dto';
 export default class UserService {
   constructor(@InjectRepository(UserRepository) private userRepository: UserRepository) {}
 
-  async createUser(createUserDto: CreateUserDto): Promise<User> {
-    if (createUserDto.password !== createUserDto.passwordConfirmation) {
-      throw new UnprocessableEntityException('As senhas não conferem');
-    } else {
-      return this.userRepository.createUser(createUserDto);
+  async createUser(data: CreateUserDto): Promise<User> {
+    const user = await this.userRepository
+      .createQueryBuilder('user')
+      .where('user.username = :username', { username: data.username })
+      .orWhere('user.email = :email', { email: data.email })
+      .getCount();
+
+    if (user) {
+      throw new SemanticException('username', ApiErrors.userExists);
     }
+
+    return this.userRepository.createUser(data);
   }
 
   async findUserById(userId: number): Promise<User> {

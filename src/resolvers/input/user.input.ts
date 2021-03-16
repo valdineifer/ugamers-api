@@ -21,22 +21,22 @@ class UserRoleInput {
 
 @InputType()
 class UserInput {
-  @IsNotEmpty({ message: ApiErrors.nullField })
   @IsEmail({}, { message: ApiErrors.invalidEmail })
   @MaxLength(200, { message: ApiErrors.tooLongField })
+  @IsNotEmpty({ message: ApiErrors.nullField })
   @Field()
   readonly email: string;
 
-  @IsNotEmpty({ message: ApiErrors.nullField })
-  @MinLength(3, { message: ApiErrors.tooShortField })
   @MaxLength(200, { message: ApiErrors.tooLongField })
+  @MinLength(3, { message: ApiErrors.tooShortField })
+  @IsNotEmpty({ message: ApiErrors.nullField })
   @Field()
   readonly name: string;
 
-  @IsNotEmpty({ message: ApiErrors.nullField })
-  @MinLength(3, { message: ApiErrors.tooShortField })
-  @MaxLength(42, { message: ApiErrors.tooLongField })
   @Matches(/^[a-z0-9_-]{3,42}$/, { message: ApiErrors.invalidUsername })
+  @MaxLength(42, { message: ApiErrors.tooLongField })
+  @MinLength(3, { message: ApiErrors.tooShortField })
+  @IsNotEmpty({ message: ApiErrors.nullField })
   @Field()
   readonly username: string;
 
@@ -44,21 +44,16 @@ class UserInput {
   @Field()
   readonly role: UserRoleInput;
 
-  @IsNotEmpty({ message: ApiErrors.nullField })
-  @MinLength(8, { message: ApiErrors.tooShortField })
   @Matches(
     /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*\-+âáàãéèêíìîôòóúùû]).{8,}$/,
     { message: ApiErrors.invalidPassword },
   )
+  @MinLength(8, { message: ApiErrors.tooShortField })
+  @IsNotEmpty({ message: ApiErrors.nullField })
   @Field()
   readonly password: string;
 
   @IsNotEmpty({ message: ApiErrors.nullField })
-  @MinLength(8, { message: ApiErrors.tooShortField })
-  @Matches(
-    /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*\-+âáàãéèêíìîôòóúùû]).{8,}$/,
-    { message: ApiErrors.invalidPassword },
-  )
   @Field()
   readonly passwordConfirmation: string;
 }

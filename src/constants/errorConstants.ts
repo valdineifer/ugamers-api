@@ -1,16 +1,17 @@
 /* eslint-disable import/prefer-default-export */
 export const ApiErrors = {
-  invalidType: "O campo '$property' informado possui tipo inválido",
-  nullField: "Campo '$property' é obrigatório",
-  tooShortField: "O campo '$property' deve conter no mínimo '$constraints1' caracteres",
-  tooLongField: "O campo '$property' deve conter no máximo '$constraints1' caracteres",
+  invalidType: 'The field is in an invalid type',
+  nullField: 'This field is required',
+  tooShortField: 'The field must contains at least $constraint1 characters',
+  tooLongField: 'The field must have less than $constraint1 characters',
 
   userNotFound: (...fields: string[]): string =>
-    `Usuário não encontrado com o(s) dado(s): ${fields.join(', ')}`,
+    `User not found with the data: ${fields.join(', ')}`,
 
-  invalidEmail: 'Informe um endereço de email válido',
-  invalidUsername: 'Nome de usuário só pode ter alfanuméricos, underscore e traços',
+  invalidEmail: 'Type a valid email address',
+  invalidUsername: 'Username must only contains letters, numbers, underscore and traces',
   invalidPassword:
-    'A senha deve ter pelo menos uma letra maiúscula, uma minúscula, um número e um símbulo',
-  passwordDiff: 'Senha incorreta',
+    'The password must contains at least: letter (upper and lower case), number and symbol',
+  passwordDiff: 'Incorrect password',
+  userExists: 'Username/email already taken',
 };

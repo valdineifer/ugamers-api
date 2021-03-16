@@ -16,8 +16,8 @@ export class FieldError {
   @Field()
   field: string;
 
-  @Field(() => [String])
-  message: string[];
+  @Field()
+  message: string;
 }
 
 @ObjectType()

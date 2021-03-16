@@ -8,18 +8,19 @@ import { InputResponse } from 'src/types';
 @Catch(ApolloError)
 export class ApolloErrorFilter implements GqlExceptionFilter {
   catch(exception: ApolloError): InputResponse {
-    const errors = [];
+    const errors = exception.extensions.invalidArgs.map((item) => {
+      let { message } = item; // in case if it is a SemanticException
 
-    Object.keys(exception.extensions.invalidArgs).forEach((key) => {
-      const constraints = [];
-      Object.keys(exception.extensions.invalidArgs[key].constraints).forEach((keyy) => {
-        constraints.push(exception.extensions.invalidArgs[key].constraints[keyy]);
-      });
+      if (item.constraints) {
+        Object.keys(item.constraints).forEach((constr) => {
+          message = item.constraints[constr];
+        });
+      }
 
-      errors.push({
-        field: exception.extensions.invalidArgs[key].property,
-        message: constraints,
-      });
+      return {
+        field: item.property,
+        message,
+      };
     });
 
     return { errors };
