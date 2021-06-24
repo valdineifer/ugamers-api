@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model migrations {
+  id        Int    @id @default(autoincrement())
+  timestamp BigInt
+  name      String @db.VarChar
+}
+
+model role {
+  id          Int    @id @default(autoincrement())
+  description String @db.VarChar
+  user        user[]
+}
+
+model user {
+  id                Int       @id @default(autoincrement())
+  name              String    @db.VarChar
+  email             String    @unique @db.VarChar
+  username          String    @db.VarChar
+  status            Boolean   @default(true)
+  password          String    @db.VarChar
+  confirmationToken String?   @db.VarChar(64)
+  recoverToken      String?   @db.VarChar(64)
+  roleId            Int       @default(1)
+  createdAt         DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt         DateTime  @default(now()) @db.Timestamptz(6)
+  deletedAt         DateTime? @db.Timestamptz(6)
+  role              role      @relation(fields: [roleId], references: [id])
+}

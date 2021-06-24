@@ -1365,6 +1365,23 @@
     consola "^2.15.0"
     node-fetch "^2.6.1"
 
+"@prisma/client@^2.25.0":
+  version "2.25.0"
+  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-2.25.0.tgz#a81cdf93ce93128eb35298cf8935480f3da6cca3"
+  integrity sha512-JDrAJ+oemiYAwgpYNJvCVT59S9bMbqkx78q2OT54xmmBoyYWWnn6t6oS6q8gKMiKHS6rzm/jdh3sy+2E0R+NAQ==
+  dependencies:
+    "@prisma/engines-version" "2.25.0-36.c838e79f39885bc8e1611849b1eb28b5bb5bc922"
+
+"@prisma/engines-version@2.25.0-36.c838e79f39885bc8e1611849b1eb28b5bb5bc922":
+  version "2.25.0-36.c838e79f39885bc8e1611849b1eb28b5bb5bc922"
+  resolved "https://registry.yarnpkg.com/@prisma/engines-version/-/engines-version-2.25.0-36.c838e79f39885bc8e1611849b1eb28b5bb5bc922.tgz#b353576a97d0c1952fd4f4201189e845aaafbea8"
+  integrity sha512-uZaonv3ZzLYAi99AooOe2BOBmb3k+ibVsJyZ5J3F6U1uFHTtTI9AVzC51mE09iNcgq3ZBt2CZNi5CDQZedMWyA==
+
+"@prisma/engines@2.24.1-2.18095475d5ee64536e2f93995e48ad800737a9e4":
+  version "2.24.1-2.18095475d5ee64536e2f93995e48ad800737a9e4"
+  resolved "https://registry.yarnpkg.com/@prisma/engines/-/engines-2.24.1-2.18095475d5ee64536e2f93995e48ad800737a9e4.tgz#7e542d510f0c03f41b73edbb17254f5a0b272a4d"
+  integrity sha512-29/xO9kqeQka+wN5Ev10l5L4XQXNVXdPToJs1M29VZ2imQsNsL4rtz26m3qGM54IoGWwwfTVdvuVRxKnDl2rig==
+
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@protobufjs/aspromise/-/aspromise-1.1.2.tgz#9b8b0cc663d669a7d8f6f5d0893a14d348f30fbf"
@@ -7426,6 +7443,13 @@ pretty-format@^26.0.0, pretty-format@^26.6.2:
     ansi-regex "^5.0.0"
     ansi-styles "^4.0.0"
     react-is "^17.0.1"
+
+prisma@^2.24.1:
+  version "2.24.1"
+  resolved "https://registry.yarnpkg.com/prisma/-/prisma-2.24.1.tgz#f8f4cb8baf407a71800256160277f69603bd43a3"
+  integrity sha512-L+ykMpttbWzpTNsy+PPynnEX/mS1s5zs49euXBrMjxXh1M6/f9MYlTNAj+iP90O9ZSaURSpNa+1jzatPghqUcQ==
+  dependencies:
+    "@prisma/engines" "2.24.1-2.18095475d5ee64536e2f93995e48ad800737a9e4"
 
 process-nextick-args@~2.0.0:
   version "2.0.1"
