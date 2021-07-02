@@ -14,9 +14,8 @@ import * as bcrypt from 'bcrypt';
 import User from 'src/entities/User';
 import UserService from 'src/services/users.service';
 import Role from 'src/entities/Role';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { Logger } from '@nestjs/common';
+import RoleService from 'src/services/role.service';
 import { InputResponse, MyContext } from '../types';
 import UserInput from './input/user.input';
 import LoginInput from './input/login.input';
@@ -39,7 +38,7 @@ class UserResponse extends InputResponse {
 class UserResolver {
   constructor(
     private readonly userService: UserService,
-    @InjectRepository(Role) private readonly roleRepository: Repository<Role>,
+    private readonly roleService: RoleService,
   ) {}
 
   @Query(() => UserResponse, { nullable: true })
@@ -117,7 +116,7 @@ class UserResolver {
 
   @ResolveField(() => Role)
   public async role(@Parent() parent: User): Promise<Role> {
-    return this.roleRepository.findOne(parent.roleId);
+    return this.roleService.find(parent.roleId);
   }
 }
 

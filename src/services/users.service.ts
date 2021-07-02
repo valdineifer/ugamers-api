@@ -1,6 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import SemanticException from 'src/exceptions/semantic.exception';
 import { ApiErrors } from 'src/constants/errorConstants';
+import hashPassword from 'src/utils/hashPassword';
+import * as crypto from 'crypto';
 import CreateUserDto from '../dtos/users/create-user.dto';
 import User from '../entities/User';
 import UpdateUserDto from '../dtos/users/update-user.dto';
@@ -14,12 +20,28 @@ export default class UserService {
     const user = await this.prisma.user.count({
       where: { OR: [{ username: data.username, email: data.email }] },
     });
-
     if (user) {
       throw new SemanticException('username', ApiErrors.userExists);
     }
 
-    return this.prisma.user.create({ data });
+    const readyData = {
+      ...data,
+      confirmationToken: crypto.randomBytes(32).toString('hex'),
+      password: await hashPassword(data.password),
+    };
+
+    try {
+      return await this.prisma.user.create({ data: readyData });
+    } catch (error) {
+      if (error.code.toString() === '23505') {
+        throw new ConflictException('Endereço de email já está em uso');
+      } else {
+        throw new InternalServerErrorException(
+          error,
+          'Erro ao salvar o usuário no banco de dados',
+        );
+      }
+    }
   }
 
   async findUserById(userId: number): Promise<any> {
