@@ -1,46 +1,44 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import SemanticException from 'src/exceptions/semantic.exception';
 import { ApiErrors } from 'src/constants/errorConstants';
-import UserRepository from '../repositories/users.repository';
 import CreateUserDto from '../dtos/users/create-user.dto';
 import User from '../entities/User';
 import UpdateUserDto from '../dtos/users/update-user.dto';
+import PrismaService from './prisma.service';
 
 @Injectable()
 export default class UserService {
-  constructor(@InjectRepository(UserRepository) private userRepository: UserRepository) {}
+  constructor(private prisma: PrismaService) {}
 
-  async createUser(data: CreateUserDto): Promise<User> {
-    const user = await this.userRepository
-      .createQueryBuilder('user')
-      .where('user.username = :username', { username: data.username })
-      .orWhere('user.email = :email', { email: data.email })
-      .getCount();
+  async createUser(data: CreateUserDto): Promise<any> {
+    const user = await this.prisma.user.count({
+      where: { OR: [{ username: data.username, email: data.email }] },
+    });
 
     if (user) {
       throw new SemanticException('username', ApiErrors.userExists);
     }
 
-    return this.userRepository.createUser(data);
+    return this.prisma.user.create({ data });
   }
 
-  async findUserById(userId: number): Promise<User> {
-    const user = await this.userRepository.findOne(userId);
+  async findUserById(userId: number): Promise<any> {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
 
     return user;
   }
 
-  async findUserByUsername(username: string): Promise<User> {
-    const user = await this.userRepository.findOne({ where: { username } });
+  async findUserByUsername(username: string): Promise<any> {
+    const user = await this.prisma.user.findFirst({ where: { username } });
 
     return user;
   }
 
   async updateUser(updateUserDto: UpdateUserDto, id: number): Promise<User> {
-    const result = await this.userRepository.update({ id }, updateUserDto);
+    const result = await this.prisma.user.update({ data: updateUserDto, where: { id } });
 
-    if (result.affected > 0) {
+    // TODO: check implementation
+    if (!result) {
       const user = await this.findUserById(id);
       return user;
     }
@@ -49,16 +47,16 @@ export default class UserService {
   }
 
   async deleteUser(userId: number): Promise<boolean> {
-    const result = await this.userRepository.delete({ id: userId });
+    const result = await this.prisma.user.delete({ where: { id: userId } });
 
-    if (result.affected === 0) {
+    if (!result) {
       return false;
     }
 
     return true;
   }
 
-  async findUsers(): Promise<User[]> {
-    return this.userRepository.find();
+  async findUsers(): Promise<any[]> {
+    return this.prisma.user.findMany();
   }
 }
